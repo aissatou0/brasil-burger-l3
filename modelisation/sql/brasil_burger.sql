@@ -7,32 +7,58 @@ CREATE DATABASE brasil_burger;
 \c brasil_burger;
 
 -- ============================================================
--- TABLE : GESTIONNAIRES (Admin Symfony)
+-- TABLE : GESTIONNAIRES
 -- ============================================================
+
 CREATE TABLE gestionnaires (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(150) NOT NULL,
     prenom VARCHAR(150) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    actif BOOLEAN DEFAULT TRUE
+    telephone VARCHAR(30),
+    password VARCHAR(255) NOT NULL
 );
 
 -- ============================================================
--- TABLE : CLIENTS (Application mobile / C#)
+-- TABLE : CLIENTS
 -- ============================================================
+
 CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     telephone VARCHAR(30) UNIQUE NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    id_gestionnaire INT REFERENCES gestionnaires(id)
+);
+
+-- ============================================================
+-- TABLE : ZONES
+-- ============================================================
+
+CREATE TABLE zones (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(150) NOT NULL,
+    prix_livraison NUMERIC(10,2) NOT NULL CHECK (prix_livraison >= 0)
+);
+
+-- ============================================================
+-- TABLE : LIVREURS
+-- ============================================================
+
+CREATE TABLE livreurs (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(150) NOT NULL,
+    telephone VARCHAR(30) UNIQUE NOT NULL,
+    id_gestionnaire INT REFERENCES gestionnaires(id),
+    id_zone INT REFERENCES zones(id)
 );
 
 -- ============================================================
 -- TABLE : BURGERS
 -- ============================================================
+
 CREATE TABLE burgers (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(150) NOT NULL,
@@ -42,8 +68,9 @@ CREATE TABLE burgers (
 );
 
 -- ============================================================
--- TABLE : COMPLEMENTS (Boisson / Frites)
+-- TABLE : COMPLEMENTS
 -- ============================================================
+
 CREATE TABLE complements (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(150) NOT NULL,
@@ -54,8 +81,9 @@ CREATE TABLE complements (
 );
 
 -- ============================================================
--- TABLE : MENUS (Composition)
+-- TABLE : MENUS
 -- ============================================================
+
 CREATE TABLE menus (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(150) NOT NULL,
@@ -63,7 +91,6 @@ CREATE TABLE menus (
     actif BOOLEAN DEFAULT TRUE
 );
 
--- Table de composition Menu → items (burger + boisson + frites)
 CREATE TABLE menu_items (
     id SERIAL PRIMARY KEY,
     id_menu INT REFERENCES menus(id) ON DELETE CASCADE,
@@ -74,41 +101,25 @@ CREATE TABLE menu_items (
 );
 
 -- ============================================================
--- TABLE : ZONES (livraison)
--- ============================================================
-CREATE TABLE zones (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(150) NOT NULL,
-    prix_livraison NUMERIC(10,2) NOT NULL CHECK (prix_livraison >= 0)
-);
-
--- ============================================================
--- TABLE : LIVREURS
--- ============================================================
-CREATE TABLE livreurs (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(150) NOT NULL,
-    telephone VARCHAR(30) UNIQUE NOT NULL
-);
-
--- ============================================================
 -- TABLE : COMMANDES
 -- ============================================================
+
 CREATE TABLE commandes (
     id SERIAL PRIMARY KEY,
     id_client INT REFERENCES clients(id),
-    type_commande VARCHAR(20) NOT NULL CHECK (type_commande IN ('SUR_PLACE', 'A_EMPORTER', 'LIVRAISON')),
-    etat VARCHAR(20) NOT NULL DEFAULT 'EN_COURS'
-        CHECK (etat IN ('EN_COURS','VALIDE','TERMINE','ANNULE')),
+    id_gestionnaire INT REFERENCES gestionnaires(id),
+    id_livreur INT REFERENCES livreurs(id),
+    id_zone INT REFERENCES zones(id),
     date_commande TIMESTAMP DEFAULT NOW(),
     total NUMERIC(10,2),
-    id_zone INT REFERENCES zones(id),
-    id_livreur INT REFERENCES livreurs(id)
+    etat_commande VARCHAR(20) CHECK (etat_commande IN ('EN_COURS','VALIDEE','ANNULEE','TERMINEE')),
+    type_commande VARCHAR(20) CHECK (type_commande IN ('SUR_PLACE','A_EMPORTER','LIVRAISON'))
 );
 
 -- ============================================================
--- TABLE : COMMANDE ITEMS (détail commande)
+-- TABLE : COMMANDE ITEMS
 -- ============================================================
+
 CREATE TABLE commande_items (
     id SERIAL PRIMARY KEY,
     id_commande INT REFERENCES commandes(id) ON DELETE CASCADE,
@@ -121,10 +132,12 @@ CREATE TABLE commande_items (
 -- ============================================================
 -- TABLE : PAIEMENTS
 -- ============================================================
+
 CREATE TABLE paiements (
     id SERIAL PRIMARY KEY,
     id_commande INT UNIQUE REFERENCES commandes(id) ON DELETE CASCADE,
     date_paiement TIMESTAMP DEFAULT NOW(),
     montant NUMERIC(10,2) NOT NULL,
-    mode VARCHAR(10) NOT NULL CHECK (mode IN ('WAVE','OM'))
+    mode VARCHAR(10) CHECK (mode IN ('WAVE','OM'))
 );
+-- ============================================================
