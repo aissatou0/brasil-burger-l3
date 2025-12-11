@@ -19,10 +19,12 @@ C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\Main.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\BurgerRepository.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\ClientRepository.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\CommandeItemRepository.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\CommandeRepository.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\ComplementRepository.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\BurgerRepositoryImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\ClientRepositoryImpl.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\CommandeItemRepositoryImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\CommandeRepositoryImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\ComplementRepositoryImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\MenuRepositoryImpl.java

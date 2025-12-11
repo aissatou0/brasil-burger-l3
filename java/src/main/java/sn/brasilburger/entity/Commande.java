@@ -14,6 +14,7 @@ public class Commande {
     private double total;
     private EtatCommande etatCommande;
     private TypeCommande typeCommande;
+    
 
     // Relations
     private Client client;
@@ -50,6 +51,7 @@ public class Commande {
     }
 
     // ================= GETTERS / SETTERS =================
+    
 
     public int getId() {
         return id;

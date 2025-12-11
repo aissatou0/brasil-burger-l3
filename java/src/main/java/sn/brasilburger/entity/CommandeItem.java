@@ -9,6 +9,7 @@ public class CommandeItem {
     private int idItem;
     private int quantite;
     private double prix;
+    private int idCommande;
 
     public CommandeItem() {}
 
@@ -19,7 +20,13 @@ public class CommandeItem {
         this.quantite = quantite;
         this.prix = prix;
     }
+    public int getIdCommande() {
+    return idCommande;
+}
 
+public void setIdCommande(int idCommande) {
+    this.idCommande = idCommande;
+}
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
