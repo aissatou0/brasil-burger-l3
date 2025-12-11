@@ -1,3 +1,4 @@
+sn\brasilburger\repository\impl\ComplementRepositoryImpl.class
 sn\brasilburger\view\CommandeView.class
 sn\brasilburger\view\BurgerView.class
 sn\brasilburger\entity\enums\EtatCommande.class
@@ -7,6 +8,7 @@ sn\brasilburger\entity\Commande.class
 sn\brasilburger\entity\enums\TypeComplement.class
 sn\brasilburger\repository\impl\BurgerRepositoryImpl.class
 sn\brasilburger\config\CloudinaryConfig.class
+sn\brasilburger\service\impl\ComplementServiceImpl.class
 sn\brasilburger\entity\Client.class
 sn\brasilburger\config\Validator.class
 sn\brasilburger\repository\impl\CommandeRepositoryImpl.class
@@ -21,14 +23,18 @@ sn\brasilburger\entity\enums\ModePaiement.class
 sn\brasilburger\entity\Gestionnaire.class
 sn\brasilburger\config\DbConnection.class
 sn\brasilburger\repository\ClientRepository.class
+sn\brasilburger\entity\Complement.class
 sn\brasilburger\entity\Burger.class
+sn\brasilburger\repository\ComplementRepository.class
 sn\brasilburger\service\impl\CloudinaryImageStorageService.class
 sn\brasilburger\service\impl\BurgerServiceImpl.class
+sn\brasilburger\view\ComplementView.class
 sn\brasilburger\service\impl\ImageUploadServiceImpl.class
 sn\brasilburger\entity\enums\TypeItem.class
 sn\brasilburger\repository\CommandeRepository.class
 sn\brasilburger\service\impl\ClientServiceImpl.class
 sn\brasilburger\entity\Livreur.class
+sn\brasilburger\service\ComplementService.class
 sn\brasilburger\entity\enums\TypeCommande.class
 sn\brasilburger\entity\Zone.class
 sn\brasilburger\service\impl\CommandeServiceImpl.class
