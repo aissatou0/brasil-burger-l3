@@ -8,6 +8,7 @@ sn\brasilburger\entity\Commande.class
 sn\brasilburger\entity\enums\TypeComplement.class
 sn\brasilburger\repository\impl\BurgerRepositoryImpl.class
 sn\brasilburger\config\CloudinaryConfig.class
+sn\brasilburger\repository\MenuRepository.class
 sn\brasilburger\service\impl\ComplementServiceImpl.class
 sn\brasilburger\entity\Client.class
 sn\brasilburger\config\Validator.class
@@ -15,6 +16,7 @@ sn\brasilburger\repository\impl\CommandeRepositoryImpl.class
 sn\brasilburger\service\ImageStorageService.class
 sn\brasilburger\repository\impl\ClientRepositoryImpl.class
 sn\brasilburger\service\BurgerService.class
+sn\brasilburger\service\MenuService.class
 sn\brasilburger\repository\BurgerRepository.class
 sn\brasilburger\service\ClientService.class
 sn\brasilburger\view\ClientView.class
@@ -24,6 +26,8 @@ sn\brasilburger\entity\Gestionnaire.class
 sn\brasilburger\config\DbConnection.class
 sn\brasilburger\repository\ClientRepository.class
 sn\brasilburger\entity\Complement.class
+sn\brasilburger\service\impl\MenuServiceImpl.class
+sn\brasilburger\view\MenuView.class
 sn\brasilburger\entity\Burger.class
 sn\brasilburger\repository\ComplementRepository.class
 sn\brasilburger\service\impl\CloudinaryImageStorageService.class
@@ -31,10 +35,13 @@ sn\brasilburger\service\impl\BurgerServiceImpl.class
 sn\brasilburger\view\ComplementView.class
 sn\brasilburger\service\impl\ImageUploadServiceImpl.class
 sn\brasilburger\entity\enums\TypeItem.class
+sn\brasilburger\entity\Menu.class
 sn\brasilburger\repository\CommandeRepository.class
 sn\brasilburger\service\impl\ClientServiceImpl.class
+sn\brasilburger\entity\MenuItem.class
 sn\brasilburger\entity\Livreur.class
 sn\brasilburger\service\ComplementService.class
 sn\brasilburger\entity\enums\TypeCommande.class
 sn\brasilburger\entity\Zone.class
+sn\brasilburger\repository\impl\MenuRepositoryImpl.class
 sn\brasilburger\service\impl\CommandeServiceImpl.class

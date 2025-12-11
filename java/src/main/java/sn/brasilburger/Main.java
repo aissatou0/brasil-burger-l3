@@ -11,6 +11,7 @@ import sn.brasilburger.service.ClientService;
 import sn.brasilburger.service.CommandeService;
 import sn.brasilburger.service.BurgerService;
 import sn.brasilburger.service.ImageStorageService;
+import sn.brasilburger.service.MenuService;
 import sn.brasilburger.service.impl.ClientServiceImpl;
 import sn.brasilburger.service.impl.CommandeServiceImpl;
 import sn.brasilburger.service.impl.BurgerServiceImpl;
@@ -19,11 +20,14 @@ import sn.brasilburger.view.ClientView;
 import sn.brasilburger.view.CommandeView;
 import sn.brasilburger.view.BurgerView;
 import sn.brasilburger.repository.ComplementRepository;
+import sn.brasilburger.repository.MenuRepository;
 import sn.brasilburger.repository.impl.ComplementRepositoryImpl;
+import sn.brasilburger.repository.impl.MenuRepositoryImpl;
 import sn.brasilburger.service.ComplementService;
 import sn.brasilburger.service.impl.ComplementServiceImpl;
+import sn.brasilburger.service.impl.MenuServiceImpl;
 import sn.brasilburger.view.ComplementView;
-
+import sn.brasilburger.view.MenuView;
 
 import java.util.Scanner;
 
@@ -47,21 +51,26 @@ public class Main {
         CommandeRepository commandeRepository = new CommandeRepositoryImpl();
         BurgerRepository burgerRepository = new BurgerRepositoryImpl();
         ComplementRepository complementRepository = new ComplementRepositoryImpl();
+        MenuRepository menuRepository = new MenuRepositoryImpl();
 
         // Services
         ClientService clientService = new ClientServiceImpl(clientRepository);
         CommandeService commandeService = new CommandeServiceImpl(commandeRepository);
         BurgerService burgerService = new BurgerServiceImpl(burgerRepository, imageStorageService);
         ComplementService complementService = new ComplementServiceImpl(complementRepository, imageStorageService);
+        MenuService menuService = new MenuServiceImpl(menuRepository, imageStorageService);
 
         // Vues
         ClientView clientView = new ClientView(clientService);
         CommandeView commandeView = new CommandeView(commandeService);
         BurgerView burgerView = new BurgerView(burgerService);
         ComplementView complementView = new ComplementView(complementService);
+        MenuView menuView = new MenuView(menuService);
 
         
-
+        
+        
+        
 
 
         Scanner scanner = new Scanner(System.in);
@@ -76,6 +85,8 @@ public class Main {
             System.out.println("2 - Gestion des Commandes");
             System.out.println("3 - Gestion des Burgers");
             System.out.println("4 - Gestion des Compléments");
+            System.out.println("5 - Gestion des Menus");
+
             System.out.println("0 - Quitter");
             System.out.println("==========================================");
             System.out.print("Votre choix : ");
@@ -91,6 +102,7 @@ public class Main {
                 case 2 -> commandeView.demarrer();
                 case 3 -> burgerView.demarrer();
                 case 4 -> complementView.demarrer();
+                case 5 -> menuView.demarrer();
                 case 0 -> System.out.println("✅ Fermeture de l'application...");
                 default -> {
                     System.out.println("❌ Choix invalide.");

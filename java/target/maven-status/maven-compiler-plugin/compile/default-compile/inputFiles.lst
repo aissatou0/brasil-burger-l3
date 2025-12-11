@@ -13,6 +13,8 @@ C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\entity\enums\TypeItem.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\entity\Gestionnaire.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\entity\Livreur.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\entity\Menu.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\entity\MenuItem.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\entity\Zone.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\Main.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\BurgerRepository.java
@@ -23,6 +25,8 @@ C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\ClientRepositoryImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\CommandeRepositoryImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\ComplementRepositoryImpl.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\impl\MenuRepositoryImpl.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\repository\MenuRepository.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\BurgerService.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\ClientService.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\CommandeService.java
@@ -34,7 +38,10 @@ C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\impl\CommandeServiceImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\impl\ComplementServiceImpl.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\impl\ImageUploadServiceImpl.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\impl\MenuServiceImpl.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\service\MenuService.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\view\BurgerView.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\view\ClientView.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\view\CommandeView.java
 C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\view\ComplementView.java
+C:\Users\DELL\OneDrive\Documents\modelisation\java\src\main\java\sn\brasilburger\view\MenuView.java
