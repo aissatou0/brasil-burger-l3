@@ -1,35 +1,14 @@
 package sn.brasilburger;
 
 import sn.brasilburger.config.CloudinaryConfig;
-import sn.brasilburger.repository.ClientRepository;
-import sn.brasilburger.repository.CommandeItemRepository;
-import sn.brasilburger.repository.CommandeRepository;
-import sn.brasilburger.repository.BurgerRepository;
-import sn.brasilburger.repository.impl.ClientRepositoryImpl;
-import sn.brasilburger.repository.impl.CommandeItemRepositoryImpl;
-import sn.brasilburger.repository.impl.CommandeRepositoryImpl;
-import sn.brasilburger.repository.impl.BurgerRepositoryImpl;
-import sn.brasilburger.service.ClientService;
-import sn.brasilburger.service.CommandeService;
-import sn.brasilburger.service.BurgerService;
-import sn.brasilburger.service.ImageStorageService;
-import sn.brasilburger.service.MenuService;
-import sn.brasilburger.service.impl.ClientServiceImpl;
-import sn.brasilburger.service.impl.CommandeServiceImpl;
-import sn.brasilburger.service.impl.BurgerServiceImpl;
-import sn.brasilburger.service.impl.CloudinaryImageStorageService;
-import sn.brasilburger.view.ClientView;
-import sn.brasilburger.view.CommandeView;
-import sn.brasilburger.view.BurgerView;
-import sn.brasilburger.repository.ComplementRepository;
-import sn.brasilburger.repository.MenuRepository;
-import sn.brasilburger.repository.impl.ComplementRepositoryImpl;
-import sn.brasilburger.repository.impl.MenuRepositoryImpl;
-import sn.brasilburger.service.ComplementService;
-import sn.brasilburger.service.impl.ComplementServiceImpl;
-import sn.brasilburger.service.impl.MenuServiceImpl;
-import sn.brasilburger.view.ComplementView;
-import sn.brasilburger.view.MenuView;
+
+import sn.brasilburger.repository.*;
+import sn.brasilburger.repository.impl.*;
+
+import sn.brasilburger.service.*;
+import sn.brasilburger.service.impl.*;
+
+import sn.brasilburger.view.*;
 
 import java.util.Scanner;
 
@@ -37,54 +16,71 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Initialisation Cloudinary
+        // ==============================
+        // 1️⃣ CONFIGURATION
+        // ==============================
         CloudinaryConfig.init(
-                "dchvgy1gt",              // cloud name
-                "616118585995331",        // api key
-                "138EBUTN_Sh9Kle-og_2xiYlTkM" // api secret
+                "dchvgy1gt",
+                "616118585995331",
+                "138EBUTN_Sh9Kle-og_2xiYlTkM"
         );
         System.out.println("☁️ Cloudinary configuré !");
 
-        // Service de stockage d'images
         ImageStorageService imageStorageService = new CloudinaryImageStorageService();
 
-        // Repositories
+        // ==============================
+        // 2️⃣ REPOSITORIES
+        // ==============================
         ClientRepository clientRepository = new ClientRepositoryImpl();
         CommandeRepository commandeRepository = new CommandeRepositoryImpl();
+        CommandeItemRepository commandeItemRepository = new CommandeItemRepositoryImpl();
+
         BurgerRepository burgerRepository = new BurgerRepositoryImpl();
         ComplementRepository complementRepository = new ComplementRepositoryImpl();
         MenuRepository menuRepository = new MenuRepositoryImpl();
 
-        // Services
+        PaiementRepository paiementRepository = new PaiementRepositoryImpl();
+
+        // ==============================
+        // 3️⃣ SERVICES
+        // ==============================
         ClientService clientService = new ClientServiceImpl(clientRepository);
-        //CommandeService commandeService = new CommandeServiceImpl(commandeRepository);
-        CommandeItemRepository commandeItemRepository = new CommandeItemRepositoryImpl();
 
-CommandeService commandeService = new CommandeServiceImpl(
-        commandeRepository,
-        commandeItemRepository,
-        burgerRepository,
-        complementRepository,
-        menuRepository
-);
+        CommandeService commandeService = new CommandeServiceImpl(
+                commandeRepository,
+                commandeItemRepository,
+                burgerRepository,
+                complementRepository,
+                menuRepository
+        );
 
-        BurgerService burgerService = new BurgerServiceImpl(burgerRepository, imageStorageService);
-        ComplementService complementService = new ComplementServiceImpl(complementRepository, imageStorageService);
-        MenuService menuService = new MenuServiceImpl(menuRepository, imageStorageService);
+        PaiementService paiementService = new PaiementServiceImpl(
+                paiementRepository,
+                commandeRepository,
+                commandeItemRepository
+        );
 
-        // Vues
+        BurgerService burgerService =
+                new BurgerServiceImpl(burgerRepository, imageStorageService);
+
+        ComplementService complementService =
+                new ComplementServiceImpl(complementRepository, imageStorageService);
+
+        MenuService menuService =
+                new MenuServiceImpl(menuRepository, imageStorageService);
+
+        // ==============================
+        // 4️⃣ VUES
+        // ==============================
         ClientView clientView = new ClientView(clientService);
-        CommandeView commandeView = new CommandeView(commandeService);
+        CommandeView commandeView = new CommandeView(commandeService, paiementService);
         BurgerView burgerView = new BurgerView(burgerService);
         ComplementView complementView = new ComplementView(complementService);
         MenuView menuView = new MenuView(menuService);
 
-        
-        
-        
-        
-
-
+        // ==============================
+        // 5️⃣ MENU PRINCIPAL
+        // ==============================
         Scanner scanner = new Scanner(System.in);
         int choix;
 
@@ -98,7 +94,6 @@ CommandeService commandeService = new CommandeServiceImpl(
             System.out.println("3 - Gestion des Burgers");
             System.out.println("4 - Gestion des Compléments");
             System.out.println("5 - Gestion des Menus");
-
             System.out.println("0 - Quitter");
             System.out.println("==========================================");
             System.out.print("Votre choix : ");
@@ -116,10 +111,7 @@ CommandeService commandeService = new CommandeServiceImpl(
                 case 4 -> complementView.demarrer();
                 case 5 -> menuView.demarrer();
                 case 0 -> System.out.println("✅ Fermeture de l'application...");
-                default -> {
-                    System.out.println("❌ Choix invalide.");
-                    pause(scanner);
-                }
+                default -> pause(scanner);
             }
 
         } while (choix != 0);
@@ -131,7 +123,7 @@ CommandeService commandeService = new CommandeServiceImpl(
 
     private static void pause(Scanner scanner) {
         System.out.println("\nAppuyez sur Entrée pour continuer...");
-        scanner.nextLine(); // consomme le \n qui traîne
-        scanner.nextLine(); // attend l'appui sur Entrée
+        scanner.nextLine();
+        scanner.nextLine();
     }
 }

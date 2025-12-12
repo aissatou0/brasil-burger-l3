@@ -6,18 +6,28 @@ import sn.brasilburger.entity.enums.EtatCommande;
 import sn.brasilburger.entity.enums.TypeCommande;
 import sn.brasilburger.entity.enums.TypeItem;
 import sn.brasilburger.service.CommandeService;
+import sn.brasilburger.entity.enums.ModePaiement;
+import sn.brasilburger.service.PaiementService;
+
+
+
 
 import java.util.List;
 import java.util.Scanner;
 
+
+
 public class CommandeView {
 
     private final CommandeService commandeService;
+    private final PaiementService paiementService;
     private final Scanner scanner = new Scanner(System.in);
 
-    public CommandeView(CommandeService commandeService) {
-        this.commandeService = commandeService;
-    }
+    public CommandeView(CommandeService commandeService, PaiementService paiementService) {
+    this.commandeService = commandeService;
+    this.paiementService = paiementService;
+}
+
 
     public void demarrer() {
         int choix;
@@ -31,6 +41,7 @@ public class CommandeView {
             System.out.println("3 - Changer l'état d'une commande");
             System.out.println("4 - Supprimer une commande");
             System.out.println("5 - Ajouter un item à une commande");
+            System.out.println("6 - Payer une commande");
             System.out.println("0 - Retour");
             System.out.println("======================================");
             System.out.print("Votre choix : ");
@@ -42,6 +53,7 @@ public class CommandeView {
                 case 3 -> changerEtat();
                 case 4 -> supprimerCommande();
                 case 5 -> ajouterItem();
+                case 6 -> payerCommande();
                 case 0 -> System.out.println("Retour...");
                 default -> System.out.println("❌ Choix invalide.");
             }
@@ -89,6 +101,33 @@ public class CommandeView {
         commandeService.creerCommande(commande);
         System.out.println("✅ Commande créée avec succès !");
     }
+
+    private void payerCommande() {
+    nettoyerConsole();
+    System.out.println("=== PAIEMENT COMMANDE ===");
+
+    System.out.print("ID de la commande : ");
+    int idCommande = saisirInt();
+
+    System.out.println("Mode de paiement : ");
+    System.out.println("1 - WAVE");
+    System.out.println("2 - OM");
+    System.out.print("Choix : ");
+    int choix = saisirInt();
+
+    ModePaiement mode;
+    switch (choix) {
+        case 1 -> mode = ModePaiement.WAVE;
+        case 2 -> mode = ModePaiement.OM;
+        default -> {
+            System.out.println("❌ Mode invalide.");
+            pause();
+            return;
+        }
+    }
+
+    paiementService.payerCommande(idCommande, mode);
+}
 
     private void listerCommandes() {
         nettoyerConsole();
