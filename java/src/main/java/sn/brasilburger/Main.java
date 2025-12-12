@@ -41,7 +41,7 @@ public class Main {
 
         PaiementRepository paiementRepository = new PaiementRepositoryImpl();
         GestionnaireRepository gestionnaireRepository = new GestionnaireRepositoryImpl();
-
+        ZoneRepository zoneRepository = new ZoneRepositoryImpl();
         // ==============================
         // 3️⃣ SERVICES
         // ==============================
@@ -70,6 +70,7 @@ public class Main {
         MenuService menuService =
                 new MenuServiceImpl(menuRepository, imageStorageService);
         GestionnaireService gestionnaireService = new GestionnaireServiceImpl(gestionnaireRepository);
+        ZoneService zoneService = new ZoneServiceImpl(zoneRepository);
         // ==============================
         // 4️⃣ VUES
         // ==============================
@@ -79,8 +80,14 @@ public class Main {
         ComplementView complementView = new ComplementView(complementService);
         MenuView menuView = new MenuView(menuService);
         GestionnaireView gestionnaireView = new GestionnaireView(gestionnaireService);
-
+        ZoneView zoneView = new ZoneView(zoneService);
         
+        LivreurRepository livreurRepository = new LivreurRepositoryImpl();
+LivreurService livreurService = new LivreurServiceImpl(livreurRepository);
+LivreurView livreurView = new LivreurView(livreurService);
+
+
+
 
 
         // ==============================
@@ -100,6 +107,8 @@ public class Main {
             System.out.println("4 - Gestion des Compléments");
             System.out.println("5 - Gestion des Menus");
             System.out.println("6 - Gestion des Gestionnaires");
+            System.out.println("7 - Gestion des Zones");
+            System.out.println("8 - Gestion des Livreurs");
             System.out.println("0 - Quitter");
             System.out.println("==========================================");
             System.out.print("Votre choix : ");
@@ -117,6 +126,10 @@ public class Main {
                 case 4 -> complementView.demarrer();
                 case 5 -> menuView.demarrer();
                 case 6 -> gestionnaireView.demarrer();
+                case 7 -> zoneView.demarrer();
+                case 8 -> livreurView.demarrer();
+
+
 
                 case 0 -> System.out.println("✅ Fermeture de l'application...");
                 default -> pause(scanner);

@@ -35,13 +35,14 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public void creerCommande(Commande commande) {
-        if (commande == null || commande.getClient() == null) {
-            System.out.println("❌ Commande invalide.");
-            return;
-        }
-        commandeRepository.save(commande);
+public boolean creerCommande(Commande commande) {
+    if (commande == null || commande.getClient() == null || commande.getGestionnaire() == null) {
+        System.out.println("❌ Commande invalide");
+        return false;
     }
+    return commandeRepository.save(commande);
+}
+
 
     @Override
     public List<Commande> listerCommandes() {

@@ -7,7 +7,6 @@ import sn.brasilburger.entity.enums.TypeCommande;
 import sn.brasilburger.repository.CommandeRepository;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,18 +19,32 @@ public class CommandeRepositoryImpl implements CommandeRepository {
     }
 
     @Override
-    public void save(Commande commande) {
+    public boolean save(Commande commande) {
         String sql = """
-                INSERT INTO commandes (id_client, type_commande, etat_commande, total)
-                VALUES (?, ?, ?, ?)
-                """;
+            INSERT INTO commandes
+            (id_client, id_gestionnaire, id_livreur, id_zone,
+             type_commande, etat_commande, total)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, commande.getClient().getId());
-            ps.setString(2, commande.getTypeCommande().name());
-            ps.setString(3, commande.getEtatCommande().name());
-            ps.setDouble(4, commande.getTotal());
+            ps.setInt(2, commande.getGestionnaire().getId());
+
+            if (commande.getLivreur() != null)
+                ps.setInt(3, commande.getLivreur().getId());
+            else
+                ps.setNull(3, Types.INTEGER);
+
+            if (commande.getZone() != null)
+                ps.setInt(4, commande.getZone().getId());
+            else
+                ps.setNull(4, Types.INTEGER);
+
+            ps.setString(5, commande.getTypeCommande().name());
+            ps.setString(6, commande.getEtatCommande().name());
+            ps.setDouble(7, commande.getTotal());
 
             ps.executeUpdate();
 
@@ -40,18 +53,19 @@ public class CommandeRepositoryImpl implements CommandeRepository {
                 commande.setId(rs.getInt(1));
             }
 
-            System.out.println("✅ Commande enregistrée avec succès.");
+            return true;
 
         } catch (SQLException e) {
             System.out.println("❌ Erreur lors de l'enregistrement de la commande");
             e.printStackTrace();
+            return false;
         }
     }
 
     @Override
     public List<Commande> findAll() {
         List<Commande> commandes = new ArrayList<>();
-        String sql = "SELECT * FROM commandes";
+        String sql = "SELECT * FROM commandes ORDER BY id";
 
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -61,15 +75,12 @@ public class CommandeRepositoryImpl implements CommandeRepository {
                 commande.setId(rs.getInt("id"));
                 commande.setTotal(rs.getDouble("total"));
 
-                String etat = rs.getString("etat_commande");
-                if (etat != null) {
-                    commande.setEtatCommande(EtatCommande.valueOf(etat));
-                }
-
-                String type = rs.getString("type_commande");
-                if (type != null) {
-                    commande.setTypeCommande(TypeCommande.valueOf(type));
-                }
+                commande.setEtatCommande(
+                        EtatCommande.valueOf(rs.getString("etat_commande"))
+                );
+                commande.setTypeCommande(
+                        TypeCommande.valueOf(rs.getString("type_commande"))
+                );
 
                 Timestamp ts = rs.getTimestamp("date_commande");
                 if (ts != null) {
@@ -80,7 +91,6 @@ public class CommandeRepositoryImpl implements CommandeRepository {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Erreur lors du chargement des commandes");
             e.printStackTrace();
         }
 
@@ -90,17 +100,11 @@ public class CommandeRepositoryImpl implements CommandeRepository {
     @Override
     public void updateEtat(int idCommande, String nouvelEtat) {
         String sql = "UPDATE commandes SET etat_commande = ? WHERE id = ?";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
             ps.setString(1, nouvelEtat);
             ps.setInt(2, idCommande);
-
             ps.executeUpdate();
-            System.out.println("✅ État de la commande mis à jour.");
-
         } catch (SQLException e) {
-            System.out.println("❌ Erreur lors de la mise à jour de l'état");
             e.printStackTrace();
         }
     }
@@ -108,16 +112,10 @@ public class CommandeRepositoryImpl implements CommandeRepository {
     @Override
     public void delete(int idCommande) {
         String sql = "DELETE FROM commandes WHERE id = ?";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
             ps.setInt(1, idCommande);
             ps.executeUpdate();
-
-            System.out.println("✅ Commande supprimée avec succès.");
-
         } catch (SQLException e) {
-            System.out.println("❌ Erreur lors de la suppression");
             e.printStackTrace();
         }
     }
@@ -125,13 +123,11 @@ public class CommandeRepositoryImpl implements CommandeRepository {
     @Override
     public void updateTotal(int idCommande, double total) {
         String sql = "UPDATE commandes SET total = ? WHERE id = ?";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDouble(1, total);
             ps.setInt(2, idCommande);
             ps.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("❌ Erreur mise à jour total commande");
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

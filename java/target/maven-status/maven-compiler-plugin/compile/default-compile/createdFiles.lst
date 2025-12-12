@@ -1,5 +1,6 @@
 sn\brasilburger\repository\impl\GestionnaireRepositoryImpl.class
 sn\brasilburger\view\CommandeView.class
+sn\brasilburger\service\impl\LivreurServiceImpl.class
 sn\brasilburger\entity\enums\EtatCommande.class
 sn\brasilburger\entity\Commande.class
 sn\brasilburger\repository\MenuRepository.class
@@ -7,6 +8,7 @@ sn\brasilburger\service\impl\ComplementServiceImpl.class
 sn\brasilburger\config\Validator.class
 sn\brasilburger\entity\Paiement.class
 sn\brasilburger\repository\impl\ClientRepositoryImpl.class
+sn\brasilburger\repository\ZoneRepository.class
 sn\brasilburger\service\BurgerService.class
 sn\brasilburger\repository\BurgerRepository.class
 sn\brasilburger\service\ClientService.class
@@ -16,6 +18,7 @@ sn\brasilburger\entity\enums\ModePaiement.class
 sn\brasilburger\entity\Gestionnaire.class
 sn\brasilburger\service\impl\CommandeServiceImpl$1.class
 sn\brasilburger\repository\ClientRepository.class
+sn\brasilburger\view\LivreurView.class
 sn\brasilburger\entity\Complement.class
 sn\brasilburger\repository\impl\CommandeItemRepositoryImpl.class
 sn\brasilburger\view\MenuView.class
@@ -23,13 +26,16 @@ sn\brasilburger\repository\ComplementRepository.class
 sn\brasilburger\service\impl\BurgerServiceImpl.class
 sn\brasilburger\service\impl\ImageUploadServiceImpl.class
 sn\brasilburger\entity\enums\TypeItem.class
+sn\brasilburger\repository\LivreurRepository.class
 sn\brasilburger\service\impl\ClientServiceImpl.class
 sn\brasilburger\repository\CommandeItemRepository.class
 sn\brasilburger\entity\Livreur.class
 sn\brasilburger\service\ComplementService.class
+sn\brasilburger\service\impl\ZoneServiceImpl.class
 sn\brasilburger\repository\impl\MenuRepositoryImpl.class
 sn\brasilburger\service\impl\CommandeServiceImpl.class
 sn\brasilburger\service\PaiementService.class
+sn\brasilburger\service\LivreurService.class
 sn\brasilburger\repository\impl\ComplementRepositoryImpl.class
 sn\brasilburger\view\BurgerView.class
 sn\brasilburger\repository\impl\PaiementRepositoryImpl.class
@@ -37,12 +43,15 @@ sn\brasilburger\Main.class
 sn\brasilburger\service\CommandeService.class
 sn\brasilburger\entity\enums\TypeComplement.class
 sn\brasilburger\service\impl\PaiementServiceImpl.class
+sn\brasilburger\repository\impl\LivreurRepositoryImpl.class
 sn\brasilburger\repository\impl\BurgerRepositoryImpl.class
 sn\brasilburger\service\impl\GestionnaireServiceImpl.class
 sn\brasilburger\config\CloudinaryConfig.class
 sn\brasilburger\repository\GestionnaireRepository.class
 sn\brasilburger\service\GestionnaireService.class
 sn\brasilburger\entity\Client.class
+sn\brasilburger\service\ZoneService.class
+sn\brasilburger\view\ZoneView.class
 sn\brasilburger\repository\impl\CommandeRepositoryImpl.class
 sn\brasilburger\service\ImageStorageService.class
 sn\brasilburger\service\MenuService.class
@@ -53,6 +62,7 @@ sn\brasilburger\service\impl\CloudinaryImageStorageService.class
 sn\brasilburger\view\ComplementView.class
 sn\brasilburger\entity\Menu.class
 sn\brasilburger\repository\CommandeRepository.class
+sn\brasilburger\repository\impl\ZoneRepositoryImpl.class
 sn\brasilburger\entity\MenuItem.class
 sn\brasilburger\view\GestionnaireView.class
 sn\brasilburger\entity\enums\TypeCommande.class

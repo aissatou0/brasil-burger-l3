@@ -2,6 +2,9 @@ package sn.brasilburger.view;
 
 import sn.brasilburger.entity.Client;
 import sn.brasilburger.entity.Commande;
+import sn.brasilburger.entity.Gestionnaire;
+import sn.brasilburger.entity.Livreur;
+import sn.brasilburger.entity.Zone;
 import sn.brasilburger.entity.enums.EtatCommande;
 import sn.brasilburger.entity.enums.TypeCommande;
 import sn.brasilburger.entity.enums.TypeItem;
@@ -66,41 +69,63 @@ public class CommandeView {
     }
 
     private void creerCommande() {
-        nettoyerConsole();
-        System.out.println("=== CREATION COMMANDE ===");
+    nettoyerConsole();
+    System.out.println("=== CREATION COMMANDE ===");
 
-        System.out.print("ID du client : ");
-        int idClient = saisirInt();
+    System.out.print("ID du client : ");
+    int idClient = saisirInt();
 
-        Commande commande = new Commande();
+    System.out.print("ID du gestionnaire : ");
+    int idGestionnaire = saisirInt();
 
-        Client client = new Client();
-        client.setId(idClient);
-        commande.setClient(client);
+    Commande commande = new Commande();
 
-        System.out.println("Type de commande : ");
-        System.out.println("1 - SUR PLACE");
-        System.out.println("2 - A EMPORTER");
-        System.out.println("3 - LIVRAISON");
-        System.out.print("Choix : ");
-        int choix = saisirInt();
+    Client client = new Client();
+    client.setId(idClient);
+    commande.setClient(client);
 
-        TypeCommande typeCommande;
-        switch (choix) {
-            case 1 -> typeCommande = TypeCommande.SUR_PLACE;
-            case 2 -> typeCommande = TypeCommande.A_EMPORTER;
-            case 3 -> typeCommande = TypeCommande.LIVRAISON;
-            default -> {
-                System.out.println("❌ Type invalide.");
-                return;
-            }
-        }
+    Gestionnaire g = new Gestionnaire();
+    g.setId(idGestionnaire);
+    commande.setGestionnaire(g);
 
-        commande.setTypeCommande(typeCommande);
+    System.out.println("Type de commande : ");
+    System.out.println("1 - SUR PLACE");
+    System.out.println("2 - A EMPORTER");
+    System.out.println("3 - LIVRAISON");
+    int choix = saisirInt();
 
-        commandeService.creerCommande(commande);
-        System.out.println("✅ Commande créée avec succès !");
+    TypeCommande typeCommande = switch (choix) {
+        case 1 -> TypeCommande.SUR_PLACE;
+        case 2 -> TypeCommande.A_EMPORTER;
+        case 3 -> TypeCommande.LIVRAISON;
+        default -> null;
+    };
+
+    if (typeCommande == null) {
+        System.out.println("❌ Type invalide");
+        return;
     }
+
+    commande.setTypeCommande(typeCommande);
+
+    if (typeCommande == TypeCommande.LIVRAISON) {
+        System.out.print("ID zone : ");
+        int idZone = saisirInt();
+        Zone z = new Zone();
+        z.setId(idZone);
+        commande.setZone(z);
+
+        System.out.print("ID livreur : ");
+        int idLivreur = saisirInt();
+        Livreur l = new Livreur();
+        l.setId(idLivreur);
+        commande.setLivreur(l);
+    }
+
+    boolean ok = commandeService.creerCommande(commande);
+    System.out.println(ok ? "✅ Commande créée !" : "❌ Échec création commande");
+}
+
 
     private void payerCommande() {
     nettoyerConsole();
