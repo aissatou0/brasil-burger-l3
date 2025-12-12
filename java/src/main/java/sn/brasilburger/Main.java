@@ -40,6 +40,7 @@ public class Main {
         MenuRepository menuRepository = new MenuRepositoryImpl();
 
         PaiementRepository paiementRepository = new PaiementRepositoryImpl();
+        GestionnaireRepository gestionnaireRepository = new GestionnaireRepositoryImpl();
 
         // ==============================
         // 3️⃣ SERVICES
@@ -68,7 +69,7 @@ public class Main {
 
         MenuService menuService =
                 new MenuServiceImpl(menuRepository, imageStorageService);
-
+        GestionnaireService gestionnaireService = new GestionnaireServiceImpl(gestionnaireRepository);
         // ==============================
         // 4️⃣ VUES
         // ==============================
@@ -77,6 +78,10 @@ public class Main {
         BurgerView burgerView = new BurgerView(burgerService);
         ComplementView complementView = new ComplementView(complementService);
         MenuView menuView = new MenuView(menuService);
+        GestionnaireView gestionnaireView = new GestionnaireView(gestionnaireService);
+
+        
+
 
         // ==============================
         // 5️⃣ MENU PRINCIPAL
@@ -94,6 +99,7 @@ public class Main {
             System.out.println("3 - Gestion des Burgers");
             System.out.println("4 - Gestion des Compléments");
             System.out.println("5 - Gestion des Menus");
+            System.out.println("6 - Gestion des Gestionnaires");
             System.out.println("0 - Quitter");
             System.out.println("==========================================");
             System.out.print("Votre choix : ");
@@ -110,6 +116,8 @@ public class Main {
                 case 3 -> burgerView.demarrer();
                 case 4 -> complementView.demarrer();
                 case 5 -> menuView.demarrer();
+                case 6 -> gestionnaireView.demarrer();
+
                 case 0 -> System.out.println("✅ Fermeture de l'application...");
                 default -> pause(scanner);
             }
