@@ -12,6 +12,7 @@ sn\brasilburger\view\ClientView.class
 sn\brasilburger\entity\CommandeItem.class
 sn\brasilburger\entity\enums\ModePaiement.class
 sn\brasilburger\entity\Gestionnaire.class
+sn\brasilburger\service\impl\CommandeServiceImpl$1.class
 sn\brasilburger\repository\ClientRepository.class
 sn\brasilburger\entity\Complement.class
 sn\brasilburger\repository\impl\CommandeItemRepositoryImpl.class

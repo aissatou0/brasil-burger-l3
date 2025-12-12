@@ -11,4 +11,7 @@ public interface ComplementRepository {
     List<Complement> findAll();
 
     void deleteById(int id);
+    double findPrixById(int idComplement);
+
 }
+

@@ -11,4 +11,6 @@ public interface BurgerRepository {
     List<Burger> findAll();
 
     boolean deleteById(int id);
+    double findPrixById(int idBurger);
+
 }

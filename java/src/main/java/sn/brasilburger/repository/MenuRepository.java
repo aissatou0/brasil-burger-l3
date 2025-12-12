@@ -16,4 +16,6 @@ public interface MenuRepository {
     Menu findById(int id);
 
     void delete(int id);
+    double calculerPrixMenu(int idMenu);
+
 }

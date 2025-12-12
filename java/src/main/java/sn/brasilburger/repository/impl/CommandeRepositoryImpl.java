@@ -106,4 +106,19 @@ public class CommandeRepositoryImpl implements CommandeRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+public void updateTotal(int idCommande, double total) {
+    String sql = "UPDATE commandes SET total = ? WHERE id = ?";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setDouble(1, total);
+        ps.setInt(2, idCommande);
+        ps.executeUpdate();
+    } catch (Exception e) {
+        System.out.println("❌ Erreur mise à jour total commande");
+        e.printStackTrace();
+    }
+}
+
 }

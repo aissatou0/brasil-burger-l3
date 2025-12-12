@@ -2,9 +2,11 @@ package sn.brasilburger;
 
 import sn.brasilburger.config.CloudinaryConfig;
 import sn.brasilburger.repository.ClientRepository;
+import sn.brasilburger.repository.CommandeItemRepository;
 import sn.brasilburger.repository.CommandeRepository;
 import sn.brasilburger.repository.BurgerRepository;
 import sn.brasilburger.repository.impl.ClientRepositoryImpl;
+import sn.brasilburger.repository.impl.CommandeItemRepositoryImpl;
 import sn.brasilburger.repository.impl.CommandeRepositoryImpl;
 import sn.brasilburger.repository.impl.BurgerRepositoryImpl;
 import sn.brasilburger.service.ClientService;
@@ -55,7 +57,17 @@ public class Main {
 
         // Services
         ClientService clientService = new ClientServiceImpl(clientRepository);
-        CommandeService commandeService = new CommandeServiceImpl(commandeRepository);
+        //CommandeService commandeService = new CommandeServiceImpl(commandeRepository);
+        CommandeItemRepository commandeItemRepository = new CommandeItemRepositoryImpl();
+
+CommandeService commandeService = new CommandeServiceImpl(
+        commandeRepository,
+        commandeItemRepository,
+        burgerRepository,
+        complementRepository,
+        menuRepository
+);
+
         BurgerService burgerService = new BurgerServiceImpl(burgerRepository, imageStorageService);
         ComplementService complementService = new ComplementServiceImpl(complementRepository, imageStorageService);
         MenuService menuService = new MenuServiceImpl(menuRepository, imageStorageService);

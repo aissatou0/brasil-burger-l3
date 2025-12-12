@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface CommandeItemRepository {
 
-    void save(CommandeItem item);
+    void save(int idCommande, CommandeItem item);
 
     List<CommandeItem> findByCommande(int idCommande);
 
     void deleteByCommande(int idCommande);
+
+    double calculerTotalCommande(int idCommande);
 }

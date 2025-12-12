@@ -109,4 +109,32 @@ public class MenuRepositoryImpl implements MenuRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+public double calculerPrixMenu(int idMenu) {
+    String sql = """
+        SELECT SUM(
+            CASE 
+                WHEN mi.type_item = 'BURGER' THEN b.prix
+                WHEN mi.type_item = 'COMPLEMENT' THEN c.prix
+            END * mi.quantite
+        )
+        FROM menu_items mi
+        LEFT JOIN burgers b ON mi.id_item = b.id AND mi.type_item = 'BURGER'
+        LEFT JOIN complements c ON mi.id_item = c.id AND mi.type_item = 'COMPLEMENT'
+        WHERE mi.id_menu = ?
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idMenu);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getDouble(1);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 }

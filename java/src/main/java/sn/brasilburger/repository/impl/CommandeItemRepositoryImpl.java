@@ -19,26 +19,26 @@ public class CommandeItemRepositoryImpl implements CommandeItemRepository {
     }
 
     @Override
-    public void save(CommandeItem item) {
-        String sql = """
-            INSERT INTO commande_items
-            (id_commande, type_item, id_item, quantite, prix)
-            VALUES (?, ?, ?, ?, ?)
-        """;
+public void save(int idCommande, CommandeItem item) {
+    String sql = """
+        INSERT INTO commande_items
+        (id_commande, type_item, id_item, quantite, prix)
+        VALUES (?, ?, ?, ?, ?)
+    """;
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, item.getIdCommande());
-            ps.setString(2, item.getTypeItem().name());
-            ps.setInt(3, item.getIdItem());
-            ps.setInt(4, item.getQuantite());
-            ps.setDouble(5, item.getPrix());
-
-            ps.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("❌ Erreur ajout item commande");
-            e.printStackTrace();
-        }
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idCommande);
+        ps.setString(2, item.getTypeItem().name());
+        ps.setInt(3, item.getIdItem());
+        ps.setInt(4, item.getQuantite());
+        ps.setDouble(5, item.getPrix());
+        ps.executeUpdate();
+    } catch (Exception e) {
+        System.out.println("❌ Erreur ajout item commande");
+        e.printStackTrace();
     }
+}
+
 
     @Override
     public List<CommandeItem> findByCommande(int idCommande) {
@@ -87,4 +87,20 @@ public class CommandeItemRepositoryImpl implements CommandeItemRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+public double calculerTotalCommande(int idCommande) {
+    String sql = "SELECT SUM(prix) FROM commande_items WHERE id_commande = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idCommande);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getDouble(1);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 }

@@ -78,4 +78,20 @@ public class ComplementRepositoryImpl implements ComplementRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+public double findPrixById(int idComplement) {
+    String sql = "SELECT prix FROM complements WHERE id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idComplement);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getDouble("prix");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 }

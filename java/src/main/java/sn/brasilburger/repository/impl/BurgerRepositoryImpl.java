@@ -79,4 +79,20 @@ public class BurgerRepositoryImpl implements BurgerRepository {
             return false;
         }
     }
+
+    @Override
+public double findPrixById(int idBurger) {
+    String sql = "SELECT prix FROM burgers WHERE id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idBurger);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getDouble("prix");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 }

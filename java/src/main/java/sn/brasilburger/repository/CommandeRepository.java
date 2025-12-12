@@ -13,4 +13,6 @@ public interface CommandeRepository {
     void updateEtat(int idCommande, String nouvelEtat);
 
     void delete(int idCommande);
+    void updateTotal(int idCommande, double total);
+
 }
