@@ -2,15 +2,18 @@ package sn.brasilburger.repository.impl;
 
 import sn.brasilburger.config.DbConnection;
 import sn.brasilburger.entity.Commande;
+import sn.brasilburger.entity.enums.EtatCommande;
+import sn.brasilburger.entity.enums.TypeCommande;
 import sn.brasilburger.repository.CommandeRepository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandeRepositoryImpl implements CommandeRepository {
 
-    private Connection connection;
+    private final Connection connection;
 
     public CommandeRepositoryImpl() {
         this.connection = DbConnection.getConnection();
@@ -18,7 +21,10 @@ public class CommandeRepositoryImpl implements CommandeRepository {
 
     @Override
     public void save(Commande commande) {
-        String sql = "INSERT INTO commandes (id_client, type_commande, etat_commande, total) VALUES (?, ?, ?, ?)";
+        String sql = """
+                INSERT INTO commandes (id_client, type_commande, etat_commande, total)
+                VALUES (?, ?, ?, ?)
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -54,12 +60,21 @@ public class CommandeRepositoryImpl implements CommandeRepository {
                 Commande commande = new Commande();
                 commande.setId(rs.getInt("id"));
                 commande.setTotal(rs.getDouble("total"));
-                commande.setEtatCommande(
-                        Enum.valueOf(
-                                sn.brasilburger.entity.enums.EtatCommande.class,
-                                rs.getString("etat_commande")
-                        )
-                );
+
+                String etat = rs.getString("etat_commande");
+                if (etat != null) {
+                    commande.setEtatCommande(EtatCommande.valueOf(etat));
+                }
+
+                String type = rs.getString("type_commande");
+                if (type != null) {
+                    commande.setTypeCommande(TypeCommande.valueOf(type));
+                }
+
+                Timestamp ts = rs.getTimestamp("date_commande");
+                if (ts != null) {
+                    commande.setDateCommande(ts.toLocalDateTime());
+                }
 
                 commandes.add(commande);
             }
@@ -108,17 +123,16 @@ public class CommandeRepositoryImpl implements CommandeRepository {
     }
 
     @Override
-public void updateTotal(int idCommande, double total) {
-    String sql = "UPDATE commandes SET total = ? WHERE id = ?";
+    public void updateTotal(int idCommande, double total) {
+        String sql = "UPDATE commandes SET total = ? WHERE id = ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setDouble(1, total);
-        ps.setInt(2, idCommande);
-        ps.executeUpdate();
-    } catch (Exception e) {
-        System.out.println("❌ Erreur mise à jour total commande");
-        e.printStackTrace();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, total);
+            ps.setInt(2, idCommande);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("❌ Erreur mise à jour total commande");
+            e.printStackTrace();
+        }
     }
-}
-
 }

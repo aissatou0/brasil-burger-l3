@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CommandeService {
 
+    // On travaille avec l’objet Commande complet
     void creerCommande(Commande commande);
 
     List<Commande> listerCommandes();
