@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // DEPENDENCY INJECTION
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<CatalogueService>();
 
 // SESSION
 builder.Services.AddDistributedMemoryCache();
