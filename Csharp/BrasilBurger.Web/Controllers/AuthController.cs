@@ -29,13 +29,14 @@ public class AuthController : Controller
 
         if (client == null)
         {
-            ModelState.AddModelError("", "Email ou mot de passe incorrect");
+            ModelState.AddModelError(string.Empty, "Email ou mot de passe incorrect");
             return View(model);
         }
 
-        // Session
+        // SESSION CLIENT
         HttpContext.Session.SetInt32("ClientId", client.Id);
         HttpContext.Session.SetString("ClientNom", client.Nom);
+        HttpContext.Session.SetString("ClientEmail", client.Email);
 
         return RedirectToAction("Index", "Home");
     }
