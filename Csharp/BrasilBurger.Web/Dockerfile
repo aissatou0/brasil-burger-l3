@@ -2,13 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY . .
+# Copier uniquement le dossier Csharp
+COPY Csharp ./Csharp
 
-WORKDIR /src/BrasilBurger.Web
+# Se placer dans le bon dossier
+WORKDIR /src/Csharp/BrasilBurger.Web
 
-RUN dotnet restore ./BrasilBurger.Web.csproj
-RUN dotnet publish ./BrasilBurger.Web.csproj -c Release -o /app/out
+RUN dotnet restore BrasilBurger.Web.csproj
+RUN dotnet publish BrasilBurger.Web.csproj -c Release -o /app/out
 
+# -------- RUNTIME STAGE --------
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
