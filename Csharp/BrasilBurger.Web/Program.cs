@@ -1,27 +1,26 @@
 using BrasilBurger.Web.Data;
-using Microsoft.EntityFrameworkCore;
 using BrasilBurger.Web.Repositories;
 using BrasilBurger.Web.Repositories.Interfaces;
 using BrasilBurger.Web.Services;
 using BrasilBurger.Web.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// MVC
 builder.Services.AddControllersWithViews();
 
-// DB CONTEXT (NEON)
+// DB (Neon)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// DEPENDENCY INJECTION
+// DI
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<CatalogueService>();
+builder.Services.AddScoped<CartService>(); // ✅ AJOUT
 
-// SESSION
+// Session
 builder.Services.AddDistributedMemoryCache();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
@@ -31,14 +30,12 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// MIDDLEWARE PIPELINE
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseSession();        // ⚠️ AVANT Authorization
+app.UseSession();        // ✅ AVANT Authorization
 app.UseAuthorization();
 
-// ROUTES
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

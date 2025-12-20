@@ -24,6 +24,7 @@
             </a>
 
             <nav class="nav-actions">
+
                 <span class="btn-login">
                     <i class="fas fa-user"></i>
                     @Context.Session.GetString("ClientNom")
@@ -31,7 +32,9 @@
 
                 <a asp-controller="Cart" asp-action="Index" class="btn-cart">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-badge">@ViewBag.CartCount</span>
+                    <span id="cartBadge" class="cart-badge">
+                        @(ViewBag.CartCount ?? 0)
+                    </span>
                 </a>
 
                 <a asp-controller="Auth" asp-action="Logout" class="btn-login">
@@ -56,8 +59,18 @@
         </div>
     </footer>
 
-    <!-- JS -->
-    <script src="~/js/home.js"></script>
+    <!-- GLOBAL JS -->
+    <script>
+        // Sécurise le badge panier au chargement (session existante)
+        fetch('/Cart/Count')
+            .then(r => r.json())
+            .then(d => {
+                const badge = document.getElementById('cartBadge');
+                if (badge) badge.textContent = d.count ?? 0;
+            })
+            .catch(() => {});
+    </script>
+
     @RenderSection("Scripts", required: false)
 
 </body>

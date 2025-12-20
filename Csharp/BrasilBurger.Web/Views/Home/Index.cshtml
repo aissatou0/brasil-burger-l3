@@ -10,7 +10,7 @@
     <p class="hero-subtitle">Savourez l'authenticité brésilienne dans chaque bouchée</p>
 </section>
 
-<!-- Filtres  -->
+<!-- Filtres -->
 <section class="filters">
     <button class="filter-btn active" data-type="all">Tout</button>
     <button class="filter-btn" data-type="menus">Menus</button>
@@ -18,62 +18,9 @@
     <button class="filter-btn" data-type="complements">Compléments</button>
 </section>
 
-
 <!-- PRODUITS -->
-<section class="products">
+<section class="products" id="productsContainer"></section>
 
-    @* ===== MENUS ===== *@
-    @foreach (var menu in Model.Menus)
-    {
-        <div class="product-card">
-            <img src="@menu.Image" class="product-image" alt="@menu.Nom" />
-            <div class="product-info">
-                <span class="product-badge">MENU</span>
-                <h3 class="product-name">@menu.Nom</h3>
-                <button class="btn-add" onclick="event.preventDefault();">
-                        <i class="fas fa-plus"></i>
-                        Ajouter
-                    </button>
-            </div>
-        </div>
-    }
-
-    @* ===== BURGERS ===== *@
-    @foreach (var burger in Model.Burgers)
-    {
-        <div class="product-card">
-            <img src="@burger.Image" class="product-image" alt="@burger.Nom" />
-            <div class="product-info">
-                <span class="product-badge">BURGER</span>
-                <h3 class="product-name">@burger.Nom</h3>
-                <div class="product-footer">
-                    <span class="product-price">@burger.Prix FCFA</span>
-                    <button class="btn-add" onclick="event.preventDefault();">
-                        <i class="fas fa-plus"></i>
-                        Ajouter
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
-
-    @* ===== COMPLEMENTS ===== *@
-    @foreach (var c in Model.Complements)
-    {
-        <div class="product-card">
-            <img src="@c.Image" class="product-image" alt="@c.Nom" />
-            <div class="product-info">
-                <span class="product-badge">COMPLÉMENT</span>
-                <h3 class="product-name">@c.Nom</h3>
-                <div class="product-footer">
-                    <span class="product-price">@c.Prix FCFA</span>
-                    <button class="btn-add" onclick="event.preventDefault();">
-                        <i class="fas fa-plus" ></i>
-                        Ajouter
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
-
-</section>
+@section Scripts {
+    <script src="~/js/home.js"></script>
+}
