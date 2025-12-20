@@ -7,9 +7,11 @@ public class CheckoutViewModel
     public List<CartItem> Items { get; set; } = new();
     public decimal Total { get; set; }
 
+    // Mode de récupération
+    public string TypeCommande { get; set; } = "A_EMPORTER";
     // SUR_PLACE | A_EMPORTER | LIVRAISON
-    public string? TypeCommande { get; set; } = "A_EMPORTER";
 
-    // (optionnel pour la suite)
-    public string? ModePaiement { get; set; } // WAVE | OM
+    // Mode de paiement
+    public string ModePaiement { get; set; } = "WAVE";
+    // WAVE | OM
 }

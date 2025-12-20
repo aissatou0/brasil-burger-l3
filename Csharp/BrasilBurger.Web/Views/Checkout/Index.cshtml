@@ -23,17 +23,44 @@
 
 <form asp-action="Confirm" method="post" style="margin:2rem">
 
-    <input type="hidden" asp-for="TypeCommande" />
+    <!-- MODE DE RECUPERATION -->
+    <h3>Mode de récupération</h3>
+    <div style="display:flex; gap:1rem; margin-bottom:1.5rem">
+        <label>
+            <input type="radio" name="TypeCommande" value="SUR_PLACE" checked />
+            Sur place
+        </label>
 
-    @* prêt pour paiement *@
-    @* 
-    <label>
-        <input type="radio" name="ModePaiement" value="WAVE" required /> Wave
-    </label>
-    <label>
-        <input type="radio" name="ModePaiement" value="OM" /> Orange Money
-    </label>
-    *@
+        <label>
+            <input type="radio" name="TypeCommande" value="A_EMPORTER" />
+            À emporter
+        </label>
 
-    <button class="btn-add">Confirmer la commande</button>
+        <label>
+            <input type="radio" name="TypeCommande" value="LIVRAISON" />
+            Livraison
+        </label>
+    </div>
+
+    <!-- MODE DE PAIEMENT -->
+    <h3>Mode de paiement</h3>
+    <div style="display:flex; gap:1rem; margin-bottom:2rem">
+        <label>
+            <input type="radio" name="ModePaiement" value="WAVE" checked />
+            Wave
+        </label>
+
+        <label>
+            <input type="radio" name="ModePaiement" value="OM" />
+            Orange Money
+        </label>
+    </div>
+
+    <!-- TOTAL -->
+    <h3>Total : @Model.Total FCFA</h3>
+
+    <button class="btn-add" style="margin-top:1rem">
+        Confirmer la commande
+    </button>
 </form>
+

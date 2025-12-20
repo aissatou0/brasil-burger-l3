@@ -14,34 +14,44 @@ public class CheckoutService
     }
 
     public int CreateCommande(int clientId, CheckoutViewModel model)
+{
+    var commande = new Commande
     {
-        var commande = new Commande
+        IdClient = clientId,
+        Total = model.Total,
+        TypeCommande = model.TypeCommande,
+        EtatCommande = "EN_COURS",
+        DateCommande = DateTime.UtcNow
+    };
+
+    _context.Commandes.Add(commande);
+    _context.SaveChanges();
+
+    foreach (var item in model.Items)
+    {
+        _context.CommandeItems.Add(new CommandeItem
         {
-            IdClient = clientId,
-            Total = model.Total,
-            TypeCommande = model.TypeCommande ?? "A_EMPORTER",
-            EtatCommande = "EN_COURS", // ✅ important
-            DateCommande = DateTime.UtcNow
-        };
-
-        _context.Commandes.Add(commande);
-        _context.SaveChanges();
-
-        foreach (var item in model.Items)
-        {
-            _context.CommandeItems.Add(new CommandeItem
-            {
-                IdCommande = commande.Id,
-                TypeItem = NormalizeType(item.Type), // 🔐 centralisé
-                IdItem = item.ItemId,
-                Quantite = item.Quantite,
-                Prix = item.Prix
-            });
-        }
-
-        _context.SaveChanges();
-        return commande.Id;
+            IdCommande = commande.Id,
+            TypeItem = NormalizeType(item.Type),
+            IdItem = item.ItemId,
+            Quantite = item.Quantite,
+            Prix = item.Prix
+        });
     }
+
+    // 💳 PAIEMENT
+    //_context.Paiements.Add(new Paiement
+    //{
+    //    IdCommande = commande.Id,
+    //    Montant = model.Total,
+    //    Mode = model.ModePaiement,
+     //   DatePaiement = DateTime.UtcNow
+    //});
+
+    _context.SaveChanges();
+    return commande.Id;
+}
+
 
     // 🔐 NORMALISATION CENTRALISÉE ET SAFE
     private string NormalizeType(string type)
