@@ -29,3 +29,82 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.orders-page {
+    max-width: 900px;
+    margin: auto;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.order-date {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.order-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.order-status.en_cours {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-status.terminee {
+    background: #d4edda;
+    color: #155724;
+}
+
+.order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-footer {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    text-align: right;
+}
+
+.empty-state {
+    text-align: center;
+    color: #777;
+    margin-top: 40px;
+}
+
+
+
+
+
