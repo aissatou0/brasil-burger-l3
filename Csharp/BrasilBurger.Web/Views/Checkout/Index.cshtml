@@ -22,5 +22,18 @@
 <h3 style="margin:2rem">Total : @Model.Total FCFA</h3>
 
 <form asp-action="Confirm" method="post" style="margin:2rem">
+
+    <input type="hidden" asp-for="TypeCommande" />
+
+    @* prêt pour paiement *@
+    @* 
+    <label>
+        <input type="radio" name="ModePaiement" value="WAVE" required /> Wave
+    </label>
+    <label>
+        <input type="radio" name="ModePaiement" value="OM" /> Orange Money
+    </label>
+    *@
+
     <button class="btn-add">Confirmer la commande</button>
 </form>

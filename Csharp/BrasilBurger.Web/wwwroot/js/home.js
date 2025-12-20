@@ -23,9 +23,9 @@ function loadProducts(type) {
             container.innerHTML = "";
 
             if (type === "all") {
-                renderList(data.menus, "MENU", "menus");
-                renderList(data.burgers, "BURGER", "burgers");
-                renderList(data.complements, "COMPLEMENT", "complements");
+                renderList(data.menus, "MENU", "menu");
+                renderList(data.burgers, "BURGER", "burger");
+                renderList(data.complements, "COMPLEMENT", "complement");
             } else {
                 renderList(data, type.toUpperCase(), type);
             }
@@ -69,7 +69,7 @@ function renderList(items, label, type) {
 }
 
 // =======================
-// ANIMATIONS SCROLL
+// ANIMATIONS
 // =======================
 function animateCards() {
     const observer = new IntersectionObserver(entries => {
@@ -93,9 +93,8 @@ function animateCards() {
 // AJOUT AU PANIER
 // =======================
 document.addEventListener("click", e => {
-    if (!e.target.closest(".add-to-cart")) return;
-
     const btn = e.target.closest(".add-to-cart");
+    if (!btn) return;
 
     const item = {
         type: btn.dataset.type,
@@ -112,7 +111,7 @@ document.addEventListener("click", e => {
     })
     .then(r => r.json())
     .then(d => {
-        document.getElementById("cartBadge").textContent = d.count;
+        const badge = document.getElementById("cartBadge");
+        if (badge) badge.textContent = d.count;
     });
 });
-

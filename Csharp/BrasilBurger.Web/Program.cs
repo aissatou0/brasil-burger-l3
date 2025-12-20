@@ -20,6 +20,8 @@ builder.Services.AddScoped<CatalogueService>();
 builder.Services.AddScoped<CartService>(); // ✅ AJOUT
 //builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<CheckoutService>();
+builder.Services.AddScoped<OrderService>();
+//builder.Services.AddScoped<OrderService>();
 
 
 // Session

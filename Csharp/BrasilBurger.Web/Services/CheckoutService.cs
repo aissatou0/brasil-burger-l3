@@ -20,6 +20,7 @@ public class CheckoutService
             IdClient = clientId,
             Total = model.Total,
             TypeCommande = model.TypeCommande ?? "A_EMPORTER",
+            EtatCommande = "EN_COURS", // ✅ important
             DateCommande = DateTime.UtcNow
         };
 
@@ -31,7 +32,7 @@ public class CheckoutService
             _context.CommandeItems.Add(new CommandeItem
             {
                 IdCommande = commande.Id,
-                TypeItem = NormalizeType(item.Type), // ✅ FIX
+                TypeItem = NormalizeType(item.Type), // 🔐 centralisé
                 IdItem = item.ItemId,
                 Quantite = item.Quantite,
                 Prix = item.Prix
@@ -42,7 +43,7 @@ public class CheckoutService
         return commande.Id;
     }
 
-    // 🔐 NORMALISATION CENTRALE
+    // 🔐 NORMALISATION CENTRALISÉE ET SAFE
     private string NormalizeType(string type)
     {
         return type.ToLower() switch

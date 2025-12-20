@@ -1,0 +1,59 @@
+@model List<BrasilBurger.Web.Models.ViewModels.OrderViewModel>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Mes commandes";
+}
+
+<div class="container">
+    <h1 class="page-title">Mes Commandes</h1>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <p>Aucune commande pour le moment.</p>
+    </div>
+}
+else
+{
+    <div class="orders-list">
+        @foreach (var order in Model)
+        {
+            <div class="order-card">
+
+                <div class="order-header">
+                    <div>
+                        <div class="order-number">Commande #@order.Id</div>
+                        <div class="order-date">
+                            @order.DateCommande.ToLocalTime().ToString("dd MMM yyyy à HH:mm")
+                        </div>
+                    </div>
+
+                    <span class="order-status-badge">
+                        @order.EtatCommande
+                    </span>
+                </div>
+
+                <div class="order-items">
+                    @foreach (var item in order.Items)
+                    {
+                        <div class="order-item">
+                            <div>
+                                <strong>@item.Nom</strong><br />
+                                Quantité : @item.Quantite
+                            </div>
+                            <div>
+                                @(item.Prix * item.Quantite) FCFA
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="order-footer">
+                    <strong>Total : @order.Total FCFA</strong>
+                </div>
+
+            </div>
+        }
+    </div>
+}
+</div>

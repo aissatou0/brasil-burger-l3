@@ -30,6 +30,12 @@
                     @Context.Session.GetString("ClientNom")
                 </span>
 
+                <!-- 🔵 MES COMMANDES -->
+    <a asp-controller="Orders" asp-action="Index" class="btn-login">
+        <i class="fas fa-receipt"></i>
+        Mes commandes
+    </a>
+
                 <a asp-controller="Cart" asp-action="Index" class="btn-cart">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cartBadge" class="cart-badge">
