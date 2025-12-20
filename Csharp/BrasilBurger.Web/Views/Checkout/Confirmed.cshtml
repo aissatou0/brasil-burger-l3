@@ -1,0 +1,13 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Commande confirmée";
+}
+
+<div style="text-align:center; margin:4rem">
+    <h1>🎉 Merci pour votre commande !</h1>
+    <p>Numéro de commande : <strong>#@ViewBag.CommandeId</strong></p>
+
+    <a asp-controller="Home" asp-action="Index" class="btn-add">
+        Retour à l'accueil
+    </a>
+</div>

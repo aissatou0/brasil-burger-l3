@@ -12,4 +12,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Burger> Burgers => Set<Burger>();
     public DbSet<Menu> Menus => Set<Menu>();
     public DbSet<Complement> Complements => Set<Complement>();
+    public DbSet<Commande> Commandes => Set<Commande>();
+public DbSet<CommandeItem> CommandeItems => Set<CommandeItem>();
+
 }

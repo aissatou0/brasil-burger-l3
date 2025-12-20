@@ -1,0 +1,26 @@
+@model BrasilBurger.Web.Models.ViewModels.CheckoutViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Validation commande";
+}
+
+<h2 style="margin:2rem">Récapitulatif</h2>
+
+<section class="products">
+@foreach (var item in Model.Items)
+{
+    <div class="product-card">
+        <img src="@item.Image" class="product-image" />
+        <div class="product-info">
+            <h3>@item.Nom</h3>
+            <p>@item.Quantite x @item.Prix FCFA</p>
+        </div>
+    </div>
+}
+</section>
+
+<h3 style="margin:2rem">Total : @Model.Total FCFA</h3>
+
+<form asp-action="Confirm" method="post" style="margin:2rem">
+    <button class="btn-add">Confirmer la commande</button>
+</form>

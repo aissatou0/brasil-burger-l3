@@ -25,7 +25,7 @@ function loadProducts(type) {
             if (type === "all") {
                 renderList(data.menus, "MENU", "menus");
                 renderList(data.burgers, "BURGER", "burgers");
-                renderList(data.complements, "COMPLÉMENT", "complements");
+                renderList(data.complements, "COMPLEMENT", "complements");
             } else {
                 renderList(data, type.toUpperCase(), type);
             }
