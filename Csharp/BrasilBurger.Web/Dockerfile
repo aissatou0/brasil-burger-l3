@@ -1,17 +1,20 @@
-# Étape 1 : build
+# -------- BUILD STAGE --------
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
 COPY . .
-RUN dotnet restore
-RUN dotnet publish -c Release -o out
 
-# Étape 2 : runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /src/BrasilBurger.Web
+
+RUN dotnet restore ./BrasilBurger.Web.csproj
+RUN dotnet publish ./BrasilBurger.Web.csproj -c Release -o /app/out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
+
 COPY --from=build /app/out .
 
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://0.0.0.0:$PORT
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "BrasilBurger.Web.dll"]
