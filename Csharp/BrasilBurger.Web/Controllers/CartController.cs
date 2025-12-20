@@ -1,5 +1,6 @@
-using BrasilBurger.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using BrasilBurger.Web.Services;
+using BrasilBurger.Web.Models.ViewModels;
 
 namespace BrasilBurger.Web.Controllers;
 
@@ -12,45 +13,40 @@ public class CartController : Controller
         _cartService = cartService;
     }
 
-    [HttpGet("/Cart")]
     public IActionResult Index()
     {
         if (HttpContext.Session.GetInt32("ClientId") == null)
             return RedirectToAction("Login", "Auth");
 
-        var cart = _cartService.GetCart(HttpContext.Session);
-        ViewBag.CartCount = _cartService.GetCount(HttpContext.Session);
+        var cart = _cartService.GetCart(HttpContext);
+        ViewBag.Total = _cartService.Total(HttpContext);
         return View(cart);
     }
 
-    [HttpGet("/Cart/Count")]
+    [HttpPost]
+    public IActionResult Add([FromBody] CartItem item)
+    {
+        _cartService.AddItem(HttpContext, item);
+
+        return Json(new
+        {
+            count = _cartService.Count(HttpContext)
+        });
+    }
+
+    [HttpGet]
     public IActionResult Count()
     {
-        var count = _cartService.GetCount(HttpContext.Session);
-        return Json(new { count });
+        return Json(new
+        {
+            count = _cartService.Count(HttpContext)
+        });
     }
 
-    public record AddToCartRequest(string Type, int ItemId, string Nom, decimal Prix, string? Image, int Quantite);
-
-    [HttpPost("/Cart/Add")]
-    public IActionResult Add([FromBody] AddToCartRequest req)
+    [HttpPost]
+    public IActionResult Remove(string type, int id)
     {
-        if (HttpContext.Session.GetInt32("ClientId") == null)
-            return Unauthorized();
-
-        var count = _cartService.Add(
-            HttpContext.Session,
-            new CartService.CartItem(req.Type, req.ItemId, req.Nom, req.Prix, req.Image, req.Quantite),
-            req.Quantite <= 0 ? 1 : req.Quantite
-        );
-
-        return Json(new { count });
-    }
-
-    [HttpPost("/Cart/Clear")]
-    public IActionResult Clear()
-    {
-        _cartService.Clear(HttpContext.Session);
+        _cartService.RemoveItem(HttpContext, type, id);
         return RedirectToAction("Index");
     }
 }

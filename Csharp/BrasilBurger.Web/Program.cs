@@ -18,6 +18,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<CatalogueService>();
 builder.Services.AddScoped<CartService>(); // ✅ AJOUT
+//builder.Services.AddScoped<CartService>();
 
 // Session
 builder.Services.AddDistributedMemoryCache();

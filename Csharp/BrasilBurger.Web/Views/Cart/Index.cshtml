@@ -1,0 +1,40 @@
+@model List<BrasilBurger.Web.Models.ViewModels.CartItem>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Mon panier";
+}
+
+<h2 style="margin:2rem">Mon panier</h2>
+
+@if (!Model.Any())
+{
+    <p style="margin:2rem">Votre panier est vide.</p>
+}
+else
+{
+    <section class="products">
+        @foreach (var item in Model)
+        {
+            <div class="product-card">
+                <img src="@item.Image" class="product-image" />
+                <div class="product-info">
+                    <h3>@item.Nom</h3>
+                    <p>@item.Prix FCFA x @item.Quantite</p>
+                    <strong>@item.Total FCFA</strong>
+
+                    <form asp-action="Remove" method="post">
+                        <input type="hidden" name="type" value="@item.Type" />
+                        <input type="hidden" name="id" value="@item.ItemId" />
+                        <button class="btn-add">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </section>
+
+    <h3 style="margin:2rem">Total : @ViewBag.Total FCFA</h3>
+
+    <a asp-controller="Checkout" asp-action="Index" class="btn-add" style="margin:2rem">
+        Passer la commande
+    </a>
+}

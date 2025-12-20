@@ -88,3 +88,31 @@ function animateCards() {
         observer.observe(card);
     });
 }
+
+// =======================
+// AJOUT AU PANIER
+// =======================
+document.addEventListener("click", e => {
+    if (!e.target.closest(".add-to-cart")) return;
+
+    const btn = e.target.closest(".add-to-cart");
+
+    const item = {
+        type: btn.dataset.type,
+        itemId: parseInt(btn.dataset.id),
+        nom: btn.dataset.nom,
+        prix: parseFloat(btn.dataset.prix),
+        image: btn.dataset.image
+    };
+
+    fetch("/Cart/Add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item)
+    })
+    .then(r => r.json())
+    .then(d => {
+        document.getElementById("cartBadge").textContent = d.count;
+    });
+});
+
