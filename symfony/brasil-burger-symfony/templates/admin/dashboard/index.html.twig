@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Gestionnaire{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur le dashboard admin</h1>
+    <p>Connexion réussie ✅</p>
+
+    <a href="{{ path('admin_logout') }}">Déconnexion</a>
+{% endblock %}
