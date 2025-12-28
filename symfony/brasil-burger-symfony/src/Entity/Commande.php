@@ -189,4 +189,37 @@ class Commande
 
         return $this;
     }
+
+    public function passerEnPreparation(): void
+{
+    if ($this->etatCommande !== 'EN_COURS') {
+        throw new \LogicException('Transition invalide');
+    }
+}
+
+public function marquerPrete(): void
+{
+    if ($this->etatCommande !== 'EN_COURS') {
+        throw new \LogicException('Transition invalide');
+    }
+
+    $this->etatCommande = 'VALIDEE';
+}
+
+public function lancerLivraison(): void
+{
+    if ($this->etatCommande !== 'VALIDEE') {
+        throw new \LogicException('Transition invalide');
+    }
+}
+
+public function annuler(): void
+{
+    if ($this->etatCommande === 'TERMINEE') {
+        throw new \LogicException('Commande déjà terminée');
+    }
+
+    $this->etatCommande = 'ANNULEE';
+}
+
 }

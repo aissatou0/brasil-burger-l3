@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande #BB-{{ commande.id }} - Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family:'Poppins',sans-serif; background:#f5f6fa; margin:0; padding:2rem; color:#2c1810; }
+
+        .page-header{ display:flex; align-items:center; gap:1rem; margin-bottom:2rem; }
+        .btn-back{ text-decoration:none; background:#e0e0e0; padding:.6rem 1rem; border-radius:8px; color:#333; font-weight:600; }
+
+        .grid-4{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; margin-bottom:2rem; }
+        .card{ background:#fff; padding:1.5rem; border-radius:18px; box-shadow:0 4px 15px rgba(0,0,0,.05); }
+
+        .badge{ padding:.4rem 1rem; border-radius:20px; font-size:.8rem; font-weight:700; display:inline-block; }
+        .badge-EN_ATTENTE{ background:#FFF3E0; color:#F57C00; }
+        .badge-EN_PREPARATION{ background:#FFF8E7; color:#FFA500; }
+        .badge-PRETE{ background:#E8F5E9; color:#4CAF50; }
+        .badge-EN_LIVRAISON{ background:#E3F2FD; color:#2196F3; }
+        .badge-ANNULEE{ background:#FBE9E7; color:#D84315; }
+
+        .timeline{ display:flex; justify-content:space-between; margin-bottom:2rem; gap:.5rem; }
+        .timeline-step{ flex:1; text-align:center; font-size:.75rem; color:#aaa; position:relative; }
+        .timeline-step::before{ content:''; width:14px; height:14px; background:#ddd; border-radius:50%; display:block; margin:0 auto 8px; }
+        .timeline-step.done::before{ background:#4CAF50; }
+        .timeline-step.active::before{ background:#C8102E; }
+        .timeline-step.active{ color:#C8102E; font-weight:700; }
+
+        table{ width:100%; border-collapse:collapse; margin-top:1rem; }
+        th,td{ padding:.8rem; border-bottom:1px solid #eee; text-align:left; vertical-align:middle; }
+        th{ font-size:.8rem; color:#8B4513; }
+
+        .product-cell{ display:flex; align-items:center; gap:.8rem; }
+        .product-thumb{ width:44px; height:44px; border-radius:10px; object-fit:cover; background:#eee; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+
+        .actions{ display:flex; gap:1rem; margin-top:2rem; flex-wrap:wrap; }
+        .btn{ padding:.7rem 1.2rem; border-radius:10px; text-decoration:none; color:#fff; font-weight:600; font-size:.85rem; display:inline-flex; align-items:center; gap:.5rem; }
+        .btn-primary{ background:#FFA500; }
+        .btn-success{ background:#4CAF50; }
+        .btn-warning{ background:#2196F3; }
+        .btn-danger{ background:#C8102E; }
+        .btn-secondary{ background:#6c757d; }
+    </style>
+</head>
+
+<body>
+
+<div class="page-header">
+    <a href="{{ path('admin_commandes_index') }}" class="btn-back">← Retour</a>
+    <h1>Commande #BB-{{ commande.id }}</h1>
+</div>
+
+<div class="grid-4">
+    <div class="card">
+        <h4>Commande</h4>
+        <p>#BB-{{ commande.id }}</p>
+        <small>{{ commande.dateCommande|date('d/m/Y H:i') }}</small>
+    </div>
+
+    <div class="card">
+        <h4>Client</h4>
+        <p>{{ commande.client.prenom }} {{ commande.client.nom }}</p>
+        <small>{{ commande.client.telephone }}</small>
+    </div>
+
+    <div class="card">
+    <h4>Statut</h4>
+
+    {% if commande.etatCommande == 'EN_COURS' %}
+        <span class="badge badge-EN_PREPARATION">EN PRÉPARATION</span>
+    {% elseif commande.etatCommande == 'VALIDEE' %}
+        <span class="badge badge-PRETE">PRÊTE / EN LIVRAISON</span>
+    {% elseif commande.etatCommande == 'ANNULEE' %}
+        <span class="badge badge-ANNULEE">ANNULÉE</span>
+    {% elseif commande.etatCommande == 'TERMINEE' %}
+        <span class="badge badge-EN_LIVRAISON">TERMINÉE</span>
+    {% endif %}
+</div>
+
+
+    <div class="card">
+        <h4>Total</h4>
+        <strong>{{ commande.total|number_format(0,' ',' ') }} FCFA</strong>
+    </div>
+</div>
+
+{% set steps = ['EN_COURS','VALIDEE','TERMINEE'] %}
+{% set reached = true %}
+
+<div class="card timeline">
+    {% for step in steps %}
+        {% set isActive = (step == commande.etatCommande) %}
+
+        <div class="timeline-step
+            {{ reached ? 'done' : '' }}
+            {{ isActive ? 'active' : '' }}">
+
+            {% if step == 'EN_COURS' %}
+                EN PRÉPARATION
+            {% elseif step == 'VALIDEE' %}
+                PRÊTE / LIVRAISON
+            {% elseif step == 'TERMINEE' %}
+                TERMINÉE
+            {% endif %}
+        </div>
+
+        {# dès qu’on atteint l’état courant, on arrête de marquer "done" #}
+        {% if isActive %}
+            {% set reached = false %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+
+<div class="card">
+    <h3>Détail de la commande</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Type</th>
+            <th>Prix</th>
+            <th>Qté</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for item in itemsDetails %}
+            <tr>
+                <td>
+                    <div class="product-cell">
+                        {% if item.image %}
+                            <img class="product-thumb" src="{{ item.image }}" alt="{{ item.nom }}">
+                        {% else %}
+                            <div class="product-thumb">🍔</div>
+                        {% endif %}
+
+                        <div>
+                            <div style="font-weight:700;">{{ item.nom }}</div>
+                            <div style="font-size:.78rem;color:#8B4513;">ID: {{ item.itemId }}</div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>{{ item.typeItem }}</td>
+                <td>{{ item.prix|number_format(0,' ',' ') }}</td>
+                <td>{{ item.quantite }}</td>
+                <td>{{ (item.prix * item.quantite)|number_format(0,' ',' ') }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5">Aucun article trouvé pour cette commande.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="actions">
+
+{% if commande.etatCommande == 'EN_COURS' %}
+    <form method="post" action="{{ path('admin_commandes_prepare', {id: commande.id}) }}">
+        <button class="btn btn-primary">
+            <i class="fa-solid fa-fire-burner"></i> Passer en préparation
+        </button>
+    </form>
+
+    <form method="post" action="{{ path('admin_commandes_cancel', {id: commande.id}) }}">
+        <button class="btn btn-danger">
+            <i class="fa-solid fa-ban"></i> Annuler
+        </button>
+    </form>
+
+{% elseif commande.etatCommande == 'VALIDEE' %}
+    <form method="post" action="{{ path('admin_commandes_deliver', {id: commande.id}) }}">
+        <button class="btn btn-warning">
+            <i class="fa-solid fa-motorcycle"></i> Lancer livraison
+        </button>
+    </form>
+{% endif %}
+
+</div>
+
+
+
+</body>
+</html>

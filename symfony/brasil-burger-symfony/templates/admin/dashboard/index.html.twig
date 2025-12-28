@@ -567,7 +567,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo-section">
-                <a href="brasil_burger_admin_dashboard.html" class="admin-logo">
+                <a href="{{ path('admin_dashboard') }}" class="admin-logo">
                     <div class="admin-logo-icon">🍔</div>
                     <div class="admin-logo-text">
                         <h2>Brasil Burger</h2>
@@ -579,13 +579,13 @@
             <nav>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="brasil_burger_admin_dashboard.html" class="nav-link active">
+                        <a href="{{ path('admin_dashboard') }}" class="nav-link active">
                             <i class="fas fa-chart-line"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="brasil_burger_admin_orders.html" class="nav-link">
+                        <a href="{{ path('admin_commandes_index') }}" class="nav-link">
                             <i class="fas fa-shopping-bag"></i>
                             <span>Commandes</span>
                         </a>
@@ -782,7 +782,7 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">Commandes récentes</h2>
-                    <a href="#" class="filter-btn">
+                    <a href="{{ path('admin_commandes_index') }}" class="filter-btn">
                         Voir tout
                     </a>
 

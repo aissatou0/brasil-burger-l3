@@ -158,5 +158,62 @@ class CommandeRepository extends ServiceEntityRepository
     return $data;
 }
 
+public function findWithFilters(
+    ?string $status,
+    ?string $date,
+    ?string $client
+): array {
+    $qb = $this->createQueryBuilder('c')
+        ->leftJoin('c.client', 'cl')
+        ->addSelect('cl')
+        ->orderBy('c.dateCommande', 'DESC');
+
+    if ($status) {
+        $qb->andWhere('c.etatCommande = :status')
+           ->setParameter('status', $status);
+    }
+
+    if ($date) {
+        $qb->andWhere('DATE(c.dateCommande) = :date')
+           ->setParameter('date', $date);
+    }
+
+    if ($client) {
+        $qb->andWhere('cl.nom LIKE :client OR cl.prenom LIKE :client')
+           ->setParameter('client', "%$client%");
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
+public function getCommandeStats(): array
+{
+    $statuses = [
+        'ALL' => null,
+        'EN_ATTENTE' => 'EN_ATTENTE',
+        'EN_PREPARATION' => 'EN_PREPARATION',
+        'PRETE' => 'PRETE',
+        'EN_LIVRAISON' => 'EN_LIVRAISON',
+        'ANNULEE' => 'ANNULEE',
+    ];
+
+    $stats = [];
+
+    foreach ($statuses as $key => $status) {
+        $qb = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)');
+
+        if ($status) {
+            $qb->where('c.etatCommande = :status')
+               ->setParameter('status', $status);
+        }
+
+        $stats[$key] = (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    return $stats;
+}
+
+
 
 }
