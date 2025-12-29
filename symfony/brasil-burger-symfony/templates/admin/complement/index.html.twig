@@ -544,7 +544,7 @@
         <main class="main-content">
             <div class="top-bar">
                 <h1 class="page-title">Gestion des Compléments</h1>
-                <button class="btn-add" onclick="openModal()">
+                <button class="btn-add" onclick="openAddModal()">
                     <i class="fas fa-plus"></i>
                     Ajouter un Complément
                 </button>
@@ -577,11 +577,12 @@
                     {{ complement.typeComplement|upper }}
                 </span>
 
-                {% if complement.actif %}
-                    <span class="complement-status status-active">
-                        <i class="fas fa-check-circle"></i> Actif
+                
+                    <span class="complement-status {{ complement.actif ? 'status-active' : 'status-archived' }}">
+                        {{ complement.actif ? 'Actif' : 'Archivé' }}
                     </span>
-                {% endif %}
+
+                
             </div>
 
             <div class="complement-body">
@@ -593,12 +594,28 @@
                 </div>
 
                 <div class="complement-actions">
-                    <button class="btn-action btn-edit">
-                        <i class="fas fa-edit"></i> Modifier
-                    </button>
-                    <button class="btn-action btn-delete">
-                        <i class="fas fa-trash"></i> Supprimer
-                    </button>
+                    <button class="btn-action btn-edit"
+    onclick="openEditModal(
+        {{ complement.id }},
+        '{{ complement.name }}',
+        '{{ complement.prix }}',
+        '{{ complement.typeComplement }}'
+    )">
+    <i class="fas fa-edit"></i> Modifier
+</button>
+
+                    <form method="POST"
+      action="{{ path('admin_complements_toggle', {id: complement.id}) }}">
+
+    <button class="btn-action {{ complement.actif ? 'btn-delete' : 'btn-edit' }}">
+        {% if complement.actif %}
+            <i class="fas fa-archive"></i> Archiver
+        {% else %}
+            <i class="fas fa-box-open"></i> Réactiver
+        {% endif %}
+    </button>
+</form>
+
                 </div>
             </div>
         </div>
@@ -620,45 +637,41 @@
                 </button>
             </div>
 
-            <form>
-                <div class="form-group">
-                    <label class="form-label">Nom du complément</label>
-                    <input type="text" class="form-input" placeholder="Ex: Frites XXL" required>
-                </div>
+            <form id="complementForm"
+      method="POST"
+      enctype="multipart/form-data">
 
-                <div class="form-group">
-                    <label class="form-label">Catégorie</label>
-                    <select class="form-select" required>
-                        <option value="">-- Choisir une catégorie --</option>
-                        <option value="frites">Frites</option>
-                        <option value="boissons">Boissons</option>
-                        <option value="desserts">Desserts</option>
-                        <option value="snacks">Snacks</option>
-                    </select>
-                </div>
+    <input type="hidden" id="formMethod">
 
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" placeholder="Description du complément..."></textarea>
-                </div>
+    <div class="form-group">
+        <label class="form-label">Nom</label>
+        <input type="text" name="name" id="nameInput" class="form-input" required>
+    </div>
 
-                <div class="form-group">
-                    <label class="form-label">Prix (FCFA)</label>
-                    <input type="number" class="form-input" placeholder="Ex: 1500" required>
-                </div>
+    <div class="form-group">
+        <label class="form-label">Catégorie</label>
+        <select name="typeComplement" id="typeInput" class="form-select" required>
+            <option value="FRITES">Frites</option>
+            <option value="BOISSON">Boisson</option>
+        </select>
+    </div>
 
-                <div class="form-group">
-                    <label class="form-label">Stock initial</label>
-                    <input type="number" class="form-input" placeholder="Ex: 50" required>
-                </div>
+    <div class="form-group">
+        <label class="form-label">Prix</label>
+        <input type="number" name="prix" id="prixInput" class="form-input" required>
+    </div>
 
-                <div class="form-group">
-                    <label class="form-label">Image du complément</label>
-                    <button type="submit" class="btn-submit">
-                <i class="fas fa-save"></i>
-                Enregistrer le complément
-            </button>
-        </form>
+    <div class="form-group">
+        <label class="form-label">Image (optionnelle)</label>
+        <input type="file" name="image" accept="image/*">
+    </div>
+
+    <button type="submit" class="btn-submit">
+        <i class="fas fa-save"></i> Enregistrer
+    </button>
+</form>
+
+
     </div>
 </div>
 
@@ -703,6 +716,37 @@ document.querySelectorAll('.category-tab').forEach(tab => {
         });
     });
 });
+</script>
+<script>
+function openEditModal(id, name, prix, type) {
+    const modal = document.getElementById('complementModal');
+    const form  = document.getElementById('complementForm');
+
+    document.querySelector('.modal-title').innerText = 'Modifier le complément';
+
+    form.action = `/admin/complements/${id}/edit`;
+
+    document.getElementById('nameInput').value = name;
+    document.getElementById('prixInput').value = prix;
+    document.getElementById('typeInput').value = type;
+
+    modal.classList.add('active');
+}
+
+function openAddModal() {
+    const modal = document.getElementById('complementModal');
+    const form  = document.getElementById('complementForm');
+
+    document.querySelector('.modal-title').innerText = 'Ajouter un complément';
+    form.action = '/admin/complements/add';
+    form.reset();
+
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('complementModal').classList.remove('active');
+}
 </script>
 
 </body>
