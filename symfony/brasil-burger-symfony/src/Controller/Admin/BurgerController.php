@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+//use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/admin/produits', name: 'admin_burgers_')]
 class BurgerController extends AbstractController
 {
@@ -86,5 +87,55 @@ public function reactiver(
 
     return $this->redirectToRoute('admin_burgers_index');
 }
+
+#[Route('/{id}/data', name: 'data', methods: ['GET'])]
+public function burgerData(Burger $burger): Response
+{
+    return $this->json([
+        'id'    => $burger->getId(),
+        'nom'   => $burger->getNom(),
+        'prix'  => $burger->getPrix(),
+        'image' => $burger->getImage(),
+        'actif' => $burger->isActif(),
+    ]);
+}
+
+#[Route('/{id}/edit', name: 'edit', methods: ['POST'])]
+public function edit(
+    Burger $burger,
+    Request $request,
+    EntityManagerInterface $em
+): Response {
+
+    $nom  = trim($request->request->get('nom'));
+    $prix = $request->request->get('prix');
+    $file = $request->files->get('image');
+
+    if (!$nom || !$prix) {
+        $this->addFlash('danger', 'Nom et prix obligatoires');
+        return $this->redirectToRoute('admin_burgers_index');
+    }
+
+    $burger->setNom($nom);
+    $burger->setPrix($prix);
+
+    // 🔹 Nouvelle image ? (OPTIONNEL)
+    if ($file) {
+        $cloudinary = new \Cloudinary\Cloudinary($_ENV['CLOUDINARY_URL']);
+
+        $upload = $cloudinary->uploadApi()->upload(
+            $file->getRealPath(),
+            ['folder' => 'brasil-burger/burgers']
+        );
+
+        $burger->setImage($upload['secure_url']);
+    }
+
+    $em->flush();
+
+    $this->addFlash('success', 'Burger modifié avec succès');
+    return $this->redirectToRoute('admin_burgers_index');
+}
+
 
 }
