@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 #[Route('/admin/produits', name: 'admin_burgers_')]
 class BurgerController extends AbstractController
 {
@@ -58,4 +58,33 @@ class BurgerController extends AbstractController
 
         return $this->redirectToRoute('admin_burgers_index');
     }
+
+    
+
+#[Route('/{id}/archive', name: 'archive', methods: ['POST'])]
+public function archive(
+    Burger $burger,
+    EntityManagerInterface $em
+): RedirectResponse {
+    $burger->setActif(false);
+    $em->flush();
+
+    $this->addFlash('success', 'Burger archivé avec succès');
+
+    return $this->redirectToRoute('admin_burgers_index');
+}
+
+#[Route('/{id}/reactiver', name: 'reactiver', methods: ['POST'])]
+public function reactiver(
+    Burger $burger,
+    EntityManagerInterface $em
+): RedirectResponse {
+    $burger->setActif(true);
+    $em->flush();
+
+    $this->addFlash('success', 'Burger réactivé avec succès');
+
+    return $this->redirectToRoute('admin_burgers_index');
+}
+
 }

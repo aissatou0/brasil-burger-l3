@@ -569,12 +569,10 @@
                 {% endif %}
 
                 <span class="product-status {{ burger.actif ? 'status-active' : 'status-archived' }}">
-                    {% if burger.actif %}
-                        <i class="fas fa-check-circle"></i> Actif
-                    {% else %}
-                        <i class="fas fa-archive"></i> Archivé
-                    {% endif %}
+                    <i class="fas {{ burger.actif ? 'fa-check-circle' : 'fa-archive' }}"></i>
+                    {{ burger.actif ? 'Actif' : 'Archivé' }}
                 </span>
+
             </div>
 
             <div class="product-body">
@@ -584,40 +582,37 @@
                     {{ burger.prix|number_format(0,' ',' ') }} FCFA
                 </div>
 
-                <div class="product-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">—</div>
-                        <div class="stat-label">Vendus</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">—</div>
-                        <div class="stat-label">Stock</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">—</div>
-                        <div class="stat-label">Note</div>
-                    </div>
-                </div>
+                
 
                 <div class="product-actions">
-                    <a href="#" class="btn-action btn-edit">
-                        <i class="fas fa-edit"></i> Modifier
-                    </a>
 
-                    {% if burger.actif %}
-                        <a href="#" class="btn-action btn-archive">
-                            <i class="fas fa-archive"></i> Archiver
-                        </a>
-                    {% else %}
-                        <a href="#" class="btn-action btn-edit">
-                            <i class="fas fa-box-open"></i> Réactiver
-                        </a>
-                    {% endif %}
+    <button class="btn-action btn-edit"
+            onclick="openModal({{ burger.id }})">
+        <i class="fas fa-edit"></i>
+        Modifier
+    </button>
 
-                    <a href="#" class="btn-action btn-delete">
-                        <i class="fas fa-trash"></i> Supprimer
-                    </a>
-                </div>
+    {% if burger.actif %}
+        <form method="post"
+              action="{{ path('admin_burgers_archive', {id: burger.id}) }}"
+              onsubmit="return confirm('Archiver ce burger ?')">
+            <button class="btn-action btn-archive" type="submit">
+                <i class="fas fa-archive"></i>
+                Archiver
+            </button>
+        </form>
+    {% else %}
+        <form method="post"
+              action="{{ path('admin_burgers_reactiver', {id: burger.id}) }}">
+            <button class="btn-action btn-edit" type="submit">
+                <i class="fas fa-box-open"></i>
+                Réactiver
+            </button>
+        </form>
+    {% endif %}
+
+</div>
+
             </div>
         </div>
     {% else %}
