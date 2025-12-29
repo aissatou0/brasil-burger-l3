@@ -18,8 +18,9 @@ class Complement
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 150)]
+    #[ORM\Column(name: 'nom', length: 150)]
     private ?string $name = null;
+
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $prix = null;

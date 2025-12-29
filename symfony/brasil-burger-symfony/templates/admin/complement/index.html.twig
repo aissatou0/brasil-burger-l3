@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion Produits - Brasil Burger Admin</title>
+    <title>Gestion Compléments - Brasil Burger Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -71,7 +71,6 @@
             color: rgba(255,255,255,0.6);
             font-size: 0.75rem;
         }
-
         .nav-menu {
             list-style: none;
             padding: 0 1rem;
@@ -115,6 +114,7 @@
             min-height: 100vh;
         }
 
+
         .top-bar {
             background: white;
             padding: 1.5rem 2rem;
@@ -124,25 +124,12 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
 
         .page-title {
             font-size: 1.8rem;
             font-weight: 800;
             color: #C8102E;
-        }
-
-        .btn-menu-mobile {
-            display: none;
-            background: #C8102E;
-            color: white;
-            border: none;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.2rem;
         }
 
         .btn-add {
@@ -157,7 +144,6 @@
             align-items: center;
             gap: 0.5rem;
             transition: all 0.3s ease;
-            text-decoration: none;
         }
 
         .btn-add:hover {
@@ -165,13 +151,41 @@
             box-shadow: 0 8px 25px rgba(200, 16, 46, 0.4);
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
-        .product-card {
+        .category-tab {
+            background: white;
+            color: #2c1810;
+            border: 2px solid #e0e0e0;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-tab:hover, .category-tab.active {
+            background: #C8102E;
+            color: white;
+            border-color: #C8102E;
+        }
+
+        .complements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+}
+
+
+        .complement-card {
             background: white;
             border-radius: 20px;
             overflow: hidden;
@@ -179,67 +193,82 @@
             transition: all 0.3s ease;
         }
 
-        .product-card:hover {
+        .complement-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .product-image-container {
+        .complement-image-container {
             position: relative;
             height: 220px;
             overflow: hidden;
         }
 
-        .product-image {
+        .complement-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .product-status {
+        .complement-category {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #C8102E;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .complement-status {
             position: absolute;
             top: 1rem;
             right: 1rem;
             background: rgba(255,255,255,0.95);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .status-active {
             color: #4CAF50;
         }
 
-        .status-archived {
-            color: #f44336;
-        }
-
-        .product-body {
+        .complement-body {
             padding: 1.5rem;
         }
 
-        .product-name {
-            font-size: 1.3rem;
+        .complement-name {
+            font-size: 1.2rem;
             font-weight: 700;
             color: #2c1810;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
         }
 
-        .product-price {
-            font-size: 1.5rem;
+        .complement-description {
+            color: #8B4513;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .complement-price {
+            font-size: 1.6rem;
             font-weight: 800;
             color: #C8102E;
             margin-bottom: 1rem;
         }
 
-        .product-stats {
+        .complement-stats {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
             background: #f8f9fa;
-            border-radius: 12px;
+            border-radius: 10px;
         }
 
         .stat-item {
@@ -248,19 +277,19 @@
         }
 
         .stat-value {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #2c1810;
         }
 
         .stat-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #8B4513;
         }
 
-        .product-actions {
+        .complement-actions {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 0.5rem;
         }
 
@@ -288,17 +317,6 @@
             box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
         }
 
-        .btn-archive {
-            background: white;
-            color: #f44336;
-            border: 2px solid #f44336;
-        }
-
-        .btn-archive:hover {
-            background: #f44336;
-            color: white;
-        }
-
         .btn-delete {
             background: #f44336;
             color: white;
@@ -309,6 +327,7 @@
             transform: translateY(-2px);
         }
 
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -369,7 +388,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .form-input, .form-textarea {
+        .form-input, .form-textarea, .form-select {
             width: 100%;
             padding: 1rem;
             border: 2px solid #e0e0e0;
@@ -378,13 +397,13 @@
             transition: all 0.3s ease;
         }
 
-        .form-input:focus, .form-textarea:focus {
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
             border-color: #C8102E;
         }
 
         .form-textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
         }
 
@@ -403,9 +422,9 @@
         }
 
         .image-upload i {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #C8102E;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .btn-submit {
@@ -446,21 +465,23 @@
         }
 
         @media (max-width: 768px) {
-            .products-grid {
+            .complements-grid {
                 grid-template-columns: 1fr;
             }
 
-            .product-actions {
+            .complement-actions {
                 grid-template-columns: 1fr;
             }
         }
+
     </style>
 </head>
 <body>
     <div class="admin-layout">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo-section">
-                <a href="{{ path('admin_dashboard') }}" class="admin-logo">
+                <a href="brasil_burger_admin_dashboard.html" class="admin-logo">
                     <div class="admin-logo-icon">🍔</div>
                     <div class="admin-logo-text">
                         <h2>Brasil Burger</h2>
@@ -484,14 +505,14 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ path('admin_burgers_index') }}" class="nav-link active">
+                        <a href="{{ path('admin_burgers_index') }}" class="nav-link">
                             <i class="fas fa-hamburger"></i>
                             <span>Produits</span>
                         </a>
                     </li>
                     
                     <li class="nav-item">
-                        <a href="{{ path('admin_complements_index') }}" class="nav-link">
+                        <a href="{{ path('admin_complements_index') }}" class="nav-link active">
                             <i class="fas fa-plus-circle"></i>
                             <span>Compléments</span>
                         </a>
@@ -509,7 +530,6 @@
                         </a>
                     </li>
                     
-                    
                     <li class="nav-item">
                         <a href="brasil_burger_admin_login.html" class="nav-link">
                             <i class="fas fa-sign-out-alt"></i>
@@ -520,186 +540,169 @@
             </nav>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-content">
             <div class="top-bar">
-                <button class="btn-menu-mobile" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="page-title">Gestion des Burgers</h1>
+                <h1 class="page-title">Gestion des Compléments</h1>
                 <button class="btn-add" onclick="openModal()">
                     <i class="fas fa-plus"></i>
-                    Ajouter un Burger
+                    Ajouter un Complément
                 </button>
             </div>
-            {% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div style="margin-bottom:1rem;padding:1rem;border-radius:10px;
-             background:{{ label == 'success' ? '#E8F5E9' : '#FBE9E7' }};
-             color:#333;">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endfor %}
 
-            <div class="products-grid">
-    {% for burger in burgers %}
-        <div class="product-card" style="{{ burger.actif ? '' : 'opacity:0.6;' }}">
-            <div class="product-image-container">
-                {% if burger.image %}
-                    <img src="{{ burger.image }}" alt="{{ burger.nom }}" class="product-image">
-                {% else %}
-                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;background:#eee;">
-                        🍔
-                    </div>
-                {% endif %}
-
-                <span class="product-status {{ burger.actif ? 'status-active' : 'status-archived' }}">
-                    <i class="fas {{ burger.actif ? 'fa-check-circle' : 'fa-archive' }}"></i>
-                    {{ burger.actif ? 'Actif' : 'Archivé' }}
-                </span>
-
-            </div>
-
-            <div class="product-body">
-                <h3 class="product-name">{{ burger.nom }}</h3>
-
-                <div class="product-price">
-                    {{ burger.prix|number_format(0,' ',' ') }} FCFA
-                </div>
-
-                
-
-                <div class="product-actions">
-
-    <button class="btn-action btn-edit"
-            onclick="openModal({{ burger.id }})">
-        <i class="fas fa-edit"></i>
-        Modifier
+            <div class="category-tabs">
+    <button class="category-tab active" data-filter="all">
+        <i class="fas fa-th"></i> Tous
     </button>
-
-    {% if burger.actif %}
-        <form method="post"
-              action="{{ path('admin_burgers_archive', {id: burger.id}) }}"
-              onsubmit="return confirm('Archiver ce burger ?')">
-            <button class="btn-action btn-archive" type="submit">
-                <i class="fas fa-archive"></i>
-                Archiver
-            </button>
-        </form>
-    {% else %}
-        <form method="post"
-              action="{{ path('admin_burgers_reactiver', {id: burger.id}) }}">
-            <button class="btn-action btn-edit" type="submit">
-                <i class="fas fa-box-open"></i>
-                Réactiver
-            </button>
-        </form>
-    {% endif %}
-
+    <button class="category-tab" data-filter="frites">
+        <i class="fas fa-french-fries"></i> Frites
+    </button>
+    <button class="category-tab" data-filter="boisson">
+        <i class="fas fa-glass"></i> Boissons
+    </button>
 </div>
 
+
+            <div class="complements-grid">
+    {% for complement in complements %}
+        <div class="complement-card"
+             data-category="{{ complement.typeComplement|lower }}">
+
+            <div class="complement-image-container">
+                <img src="{{ complement.image }}"
+                     alt="{{ complement.name }}"
+                     class="complement-image">
+
+                <span class="complement-category">
+                    {{ complement.typeComplement|upper }}
+                </span>
+
+                {% if complement.actif %}
+                    <span class="complement-status status-active">
+                        <i class="fas fa-check-circle"></i> Actif
+                    </span>
+                {% endif %}
+            </div>
+
+            <div class="complement-body">
+                <h3 class="complement-name">{{ complement.name }}</h3>
+                
+
+                <div class="complement-price">
+                    {{ complement.prix|number_format(0, ' ', ' ') }} FCFA
+                </div>
+
+                <div class="complement-actions">
+                    <button class="btn-action btn-edit">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <button class="btn-action btn-delete">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </div>
             </div>
         </div>
     {% else %}
-        <p>Aucun burger trouvé.</p>
+        <p>Aucun complément trouvé.</p>
     {% endfor %}
 </div>
 
         </main>
     </div>
 
-    <div id="productModal" class="modal">
+    <!-- Modal Add/Edit Complement -->
+    <div id="complementModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Ajouter un Burger</h2>
+                <h2 class="modal-title">Ajouter un Complément</h2>
                 <button class="btn-close" onclick="closeModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <form id="burgerForm" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" id="burgerId">
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Nom du complément</label>
+                    <input type="text" class="form-input" placeholder="Ex: Frites XXL" required>
+                </div>
 
-    <div class="form-group">
-        <label class="form-label">Nom du burger</label>
-        <input type="text" name="nom" id="burgerNom" class="form-input" required>
+                <div class="form-group">
+                    <label class="form-label">Catégorie</label>
+                    <select class="form-select" required>
+                        <option value="">-- Choisir une catégorie --</option>
+                        <option value="frites">Frites</option>
+                        <option value="boissons">Boissons</option>
+                        <option value="desserts">Desserts</option>
+                        <option value="snacks">Snacks</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" placeholder="Description du complément..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Prix (FCFA)</label>
+                    <input type="number" class="form-input" placeholder="Ex: 1500" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Stock initial</label>
+                    <input type="number" class="form-input" placeholder="Ex: 50" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Image du complément</label>
+                    <button type="submit" class="btn-submit">
+                <i class="fas fa-save"></i>
+                Enregistrer le complément
+            </button>
+        </form>
     </div>
+</div>
 
-    <div class="form-group">
-        <label class="form-label">Prix (FCFA)</label>
-        <input type="number" name="prix" id="burgerPrix" class="form-input" required>
-    </div>
-
-    <div class="form-group">
-        <label class="form-label">Image (optionnelle)</label>
-        <div class="image-upload">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>Changer l’image</p>
-            <input type="file" name="image" accept="image/*" hidden>
-        </div>
-    </div>
-
-    <button type="submit" class="btn-submit">
-        <i class="fas fa-save"></i>
-        Enregistrer
-    </button>
-</form>
-
-        </div>
-    </div>
-
-    <script>
-        function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        }
-
-        function openModal() {
-            document.getElementById('productModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('productModal').classList.remove('active');
-        }
-
-        document.querySelector('.image-upload').addEventListener('click', function() {
-            this.querySelector('input[type="file"]').click();
-        });
-
-        document.addEventListener('click', function(event) {
-            const sidebar = document.querySelector('.sidebar');
-            const menuBtn = document.querySelector('.btn-menu-mobile');
-            
-            if (window.innerWidth <= 1024) {
-                if (!sidebar.contains(event.target) && event.target !== menuBtn && !menuBtn.contains(event.target)) {
-                    sidebar.classList.remove('active');
-                }
-            }
-        });
-    </script>
-    <script>
-function openModal(id = null) {
-    const modal = document.getElementById('productModal');
-    const form  = document.getElementById('burgerForm');
-
-    if (id) {
-        fetch(`/admin/produits/${id}/data`)
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('burgerNom').value = data.nom;
-                document.getElementById('burgerPrix').value = data.prix;
-                form.action = `/admin/produits/${id}/edit`;
-            });
-    } else {
-        form.reset();
-        form.action = `/admin/produits/add`;
+<script>
+    function openModal() {
+        document.getElementById('complementModal').classList.add('active');
     }
 
-    modal.classList.add('active');
-}
+    function closeModal() {
+        document.getElementById('complementModal').classList.remove('active');
+    }
 
-function closeModal() {
-    document.getElementById('productModal').classList.remove('active');
-}
+    document.querySelector('.image-upload').addEventListener('click', function() {
+        this.querySelector('input[type="file"]').click();
+    });
+
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+<script>
+document.querySelectorAll('.category-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+
+        document.querySelectorAll('.category-tab')
+            .forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const filter = tab.dataset.filter;
+
+        document.querySelectorAll('.complement-card').forEach(card => {
+            const category = card.dataset.category;
+
+            if (filter === 'all' || category === filter) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+});
 </script>
 
 </body>
