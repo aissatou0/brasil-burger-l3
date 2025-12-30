@@ -7,12 +7,24 @@ use App\Entity\CommandeItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Commande::class);
+    }
+
+
+
+    public function save(Commande $commande, bool $flush = true): void
+    {
+        $this->_em->persist($commande);
+
+        if ($flush) {
+            $this->_em->flush();
+        }
     }
 
     /**
@@ -213,6 +225,58 @@ public function getCommandeStats(): array
 
     return $stats;
 }
+
+public function findCommandesALivrer(): array
+{
+    return $this->createQueryBuilder('c')
+        ->leftJoin('c.client', 'cl')
+        ->leftJoin('c.livreur', 'l')
+        ->leftJoin('c.zone', 'z')
+        ->addSelect('cl', 'l', 'z')
+        ->where('c.typeCommande = :type')
+        ->andWhere('c.etatCommande IN (:etats)')
+        ->setParameter('type', 'LIVRAISON')
+        ->setParameter('etats', ['VALIDEE', 'EN_COURS'])
+        ->orderBy('c.dateCommande', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+public function getDeliveryStats(): array
+{
+    $em = $this->getEntityManager();
+
+    $todayStart = new \DateTime('today 00:00:00');
+    $todayEnd   = new \DateTime('today 23:59:59');
+
+    return [
+        'pending' => (int) $em->createQuery(
+            "SELECT COUNT(c.id)
+             FROM App\Entity\Commande c
+             WHERE c.typeCommande = 'LIVRAISON'
+             AND c.etatCommande = 'VALIDEE'
+             AND c.livreur IS NULL"
+        )->getSingleScalarResult(),
+
+        'progress' => (int) $em->createQuery(
+            "SELECT COUNT(c.id)
+             FROM App\Entity\Commande c
+             WHERE c.typeCommande = 'LIVRAISON'
+             AND c.etatCommande = 'EN_COURS'"
+        )->getSingleScalarResult(),
+
+        'done' => (int) $em->createQuery(
+            "SELECT COUNT(c.id)
+             FROM App\Entity\Commande c
+             WHERE c.typeCommande = 'LIVRAISON'
+             AND c.etatCommande = 'TERMINEE'
+             AND c.dateCommande BETWEEN :start AND :end"
+        )
+        ->setParameter('start', $todayStart)
+        ->setParameter('end', $todayEnd)
+        ->getSingleScalarResult(),
+    ];
+}
+
 
 
 

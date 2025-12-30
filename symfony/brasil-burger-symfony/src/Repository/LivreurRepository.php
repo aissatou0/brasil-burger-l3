@@ -16,6 +16,15 @@ class LivreurRepository extends ServiceEntityRepository
         parent::__construct($registry, Livreur::class);
     }
 
+    public function findDisponibles(): array
+{
+    return $this->createQueryBuilder('l')
+        ->leftJoin('l.zone', 'z')
+        ->addSelect('z')
+        ->getQuery()
+        ->getResult();
+}
+
     //    /**
     //     * @return Livreur[] Returns an array of Livreur objects
     //     */

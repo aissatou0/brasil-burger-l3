@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Livraisons - Brasil Burger Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f6fa;
+            color: #2c1810;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            width: 280px;
+            overflow-y: auto;
+        }
+
+        .logo-section {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .admin-logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .admin-logo-text h2 {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .admin-logo-text p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.75rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #C8102E;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(200, 16, 46, 0.4);
+        }
+
+        .btn-zone {
+            background: white;
+            color: #2196F3;
+            border: 2px solid #2196F3;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-zone:hover {
+            background: #2196F3;
+            color: white;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .icon-blue {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(25, 118, 210, 0.1));
+            color: #2196F3;
+        }
+
+        .icon-green {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(69, 160, 73, 0.1));
+            color: #4CAF50;
+        }
+
+        .icon-orange {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(251, 140, 0, 0.1));
+            color: #FF9800;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-label {
+            color: #8B4513;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2c1810;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c1810;
+        }
+
+        .filter-select {
+            padding: 0.7rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Delivery Orders List */
+        .delivery-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .delivery-item {
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 15px;
+            border-left: 4px solid #2196F3;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .delivery-item:hover {
+            background: #FFF8E7;
+            transform: translateX(5px);
+        }
+
+        .delivery-item.assigned {
+            border-left-color: #4CAF50;
+        }
+
+        .delivery-item.in-progress {
+            border-left-color: #FF9800;
+        }
+
+        .delivery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .delivery-id {
+            font-weight: 800;
+            color: #C8102E;
+            font-size: 1.1rem;
+        }
+
+        .delivery-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-pending {
+            background: #E3F2FD;
+            color: #2196F3;
+        }
+
+        .badge-assigned {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .badge-progress {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .delivery-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #2c1810;
+        }
+
+        .info-line i {
+            color: #C8102E;
+            width: 20px;
+        }
+
+        .assign-btn {
+            margin-top: 0.8rem;
+            width: 100%;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .assign-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        /* Delivery Persons List */
+        .delivery-persons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .person-card {
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .person-card:hover {
+            background: #FFF8E7;
+        }
+
+        .person-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .person-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .person-info {
+            flex: 1;
+        }
+
+        .person-name {
+            font-weight: 700;
+            color: #2c1810;
+            margin-bottom: 0.2rem;
+        }
+
+        .person-status {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-available {
+            background: #4CAF50;
+        }
+
+        .dot-busy {
+            background: #FF9800;
+        }
+
+        .dot-offline {
+            background: #9E9E9E;
+        }
+
+        .person-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box-value {
+            font-weight: 700;
+            color: #2c1810;
+            font-size: 1.1rem;
+        }
+
+        .stat-box-label {
+            font-size: 0.75rem;
+            color: #8B4513;
+        }
+
+        /* Zones Grid */
+        .zones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .zone-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .zone-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .zone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .zone-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #C8102E;
+        }
+
+        .zone-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #4CAF50;
+        }
+
+        .zone-quartiers {
+            background: #FFF8E7;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .quartiers-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+
+        .quartiers-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .quartier-tag {
+            background: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #2c1810;
+            border: 1px solid #e0e0e0;
+        }
+
+        .zone-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.7rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #C8102E;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8B4513;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c1810;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #C8102E;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            color: white;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(200, 16, 46, 0.4);
+        }
+
+        .delivery-persons-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .person-option {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .person-option:hover {
+            border-color: #C8102E;
+            background: #FFF8E7;
+        }
+
+        .person-option.selected {
+            border-color: #C8102E;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(200, 16, 46, 0.05));
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-280px);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .btn-menu-mobile {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .delivery-list {
+                grid-template-columns: 1fr;
+            }
+
+            .delivery-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <a href="{{ path('admin_dashboard') }}" class="admin-logo">
+                    <div class="admin-logo-icon">🍔</div>
+                    <div class="admin-logo-text">
+                        <h2>Brasil Burger</h2>
+                        <p>Panneau Admin</p>
+                    </div>
+                </a>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="{{ path('admin_dashboard') }}" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_commandes_index') }}" class="nav-link">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Commandes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_burgers_index') }}" class="nav-link">
+                            <i class="fas fa-hamburger"></i>
+                            <span>Produits</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ path('admin_complements_index') }}" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Compléments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_delivery_index') }}" class="nav-link active">
+                            <i class="fas fa-motorcycle"></i>
+                            <span>Livraisons</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_customers_index') }}" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Clients</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ path('admin_logout') }}" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Déconnexion</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">Gestion des Livraisons</h1>
+                <div class="top-actions">
+                    <button class="btn-zone" onclick="showZones()">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Gérer les Zones
+                    </button>
+                    <button class="btn-add" onclick="openAddDeliveryPersonModal()">
+                        <i class="fas fa-user-plus"></i>
+                        Ajouter un Livreur
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">En attente d'affectation</div>
+                        <div class="stat-value">{{ stats.pending }}</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-orange">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">En cours de livraison</div>
+                        <div class="stat-value">{{ stats.progress }}</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Livrées aujourd'hui</div>
+                        <div class="stat-value">{{ stats.done }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid" id="deliveryContent">
+                <!-- Delivery Orders -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Commandes à livrer</h2>
+                        <select class="filter-select">
+                            <option>Toutes les zones</option>
+                            <option>Zone Nord</option>
+                            <option>Zone Sud</option>
+                            <option>Zone Centre</option>
+                        </select>
+                    </div>
+
+                    <div class="delivery-list">
+                        <!-- Delivery 1 - Pending -->
+                        {% for commande in commandes %}
+<div class="delivery-item">
+    <div class="delivery-header">
+        <span class="delivery-id">#BB-{{ commande.id }}</span>
+
+        {% if commande.livreur is null %}
+            <span class="delivery-badge badge-pending">En attente</span>
+        {% elseif commande.etatCommande == 'EN_COURS' %}
+            <span class="delivery-badge badge-progress">
+                En cours – {{ commande.livreur.nom }}
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="delivery-info">
+        <div class="info-line">
+    <i class="fas fa-user"></i>
+    {% if commande.client %}
+        {{ commande.client.prenom }} {{ commande.client.nom }}
+    {% else %}
+        <em>Client inconnu</em>
+    {% endif %}
+</div>
+
+
+        <div class="info-line">
+    <i class="fas fa-map-marker-alt"></i>
+    {% if commande.zone %}
+        {{ commande.zone.nom }}
+    {% else %}
+        <em>Zone non définie</em>
+    {% endif %}
+</div>
+
+
+        <div class="info-line">
+    <i class="fas fa-wallet"></i>
+    <strong>
+        {{ commande.total ? commande.total|number_format(0,' ',' ') ~ ' FCFA' : '—' }}
+    </strong>
+</div>
+
+    </div>
+
+    {% if commande.livreur is null %}
+    <form method="post" action="{{ path('admin_delivery_assign') }}">
+        <input type="hidden" name="commande_id" value="{{ commande.id }}">
+        <select name="livreur_id" required>
+            {% for livreur in livreurs %}
+                <option value="{{ livreur.id }}">{{ livreur.nom }}</option>
+            {% endfor %}
+        </select>
+        
+    </form>
+    {% endif %}
+</div>
+{% endfor %}
+
+
+                        
+                    </div>
+                </div>
+
+                <!-- Delivery Persons -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Livreurs</h2>
+                        <select class="filter-select">
+                            <option>Tous</option>
+                            <option>Disponibles</option>
+                            <option>Occupés</option>
+                        </select>
+                    </div>
+
+                    <div class="delivery-persons">
+                        <!-- Person 1 - Available -->
+                        <div class="person-card">
+                            <div class="person-header">
+                                <div class="person-avatar">AB</div>
+                                <div class="person-info">
+                                    <div class="person-name">Abdou Sarr</div>
+                                    <div class="person-status">
+                                        <span class="status-dot dot-available"></span>
+                                        Disponible
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="person-stats">
+                                <div class="stat-box">
+                                    <div class="stat-box-value">12</div>
+                                    <div class="stat-box-label">Aujourd'hui</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">4.9</div>
+                                    <div class="stat-box-label">Note</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">98%</div>
+                                    <div class="stat-box-label">Succès</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person 2 - Busy -->
+                        <div class="person-card">
+                            <div class="person-header">
+                                <div class="person-avatar">IB</div>
+                                <div class="person-info">
+                                    <div class="person-name">Ibrahima Diop</div>
+                                    <div class="person-status">
+                                        <span class="status-dot dot-busy"></span>
+                                        En livraison (2)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="person-stats">
+                                <div class="stat-box">
+                                    <div class="stat-box-value">15</div>
+                                    <div class="stat-box-label">Aujourd'hui</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">4.8</div>
+                                    <div class="stat-box-label">Note</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">96%</div>
+                                    <div class="stat-box-label">Succès</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person 3 - Available -->
+                        <div class="person-card">
+                            <div class="person-header">
+                                <div class="person-avatar">MO</div>
+                                <div class="person-info">
+                                    <div class="person-name">Moussa Fall</div>
+                                    <div class="person-status">
+                                        <span class="status-dot dot-available"></span>
+                                        Disponible
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="person-stats">
+                                <div class="stat-box">
+                                    <div class="stat-box-value">8</div>
+                                    <div class="stat-box-label">Aujourd'hui</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">4.7</div>
+                                    <div class="stat-box-label">Note</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">95%</div>
+                                    <div class="stat-box-label">Succès</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person 4 - Offline -->
+                        <div class="person-card" style="opacity: 0.6;">
+                            <div class="person-header">
+                                <div class="person-avatar">CH</div>
+                                <div class="person-info">
+                                    <div class="person-name">Cheikh Sy</div>
+                                    <div class="person-status">
+                                        <span class="status-dot dot-offline"></span>
+                                        Hors ligne
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="person-stats">
+                                <div class="stat-box">
+                                    <div class="stat-box-value">0</div>
+                                    <div class="stat-box-label">Aujourd'hui</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">4.6</div>
+                                    <div class="stat-box-label">Note</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box-value">93%</div>
+                                    <div class="stat-box-label">Succès</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zones Section (Hidden by default) -->
+            <div class="zones-grid" id="zonesContent" style="display: none;">
+                <!-- Zone 1 -->
+                <div class="zone-card">
+                    <div class="zone-header">
+                        <div class="zone-name">Zone Nord</div>
+                        <div class="zone-price">1500 F</div>
+                    </div>
+                    <div class="zone-quartiers">
+                        <div class="quartiers-title">Quartiers couverts</div>
+                        <div class="quartiers-list">
+                            <span class="quartier-tag">Almadies</span>
+                            <span class="quartier-tag">Ngor</span>
+                            <span class="quartier-tag">Ouakam</span>
+                            <span class="quartier-tag">Sacré Coeur 1-3</span>
+                        </div>
+                    </div>
+                    <div class="zone-actions">
+                        <button class="btn-action btn-edit" onclick="openZoneModal()">
+                            <i class="fas fa-edit"></i>
+                            Modifier
+                        </button>
+                        <button class="btn-action btn-delete">
+                            <i class="fas fa-trash"></i>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Zone 2 -->
+                <div class="zone-card">
+                    <div class="zone-header">
+                        <div class="zone-name">Zone Centre</div>
+                        <div class="zone-price">1000 F</div>
+                    </div>
+                    <div class="zone-quartiers">
+                        <div class="quartiers-title">Quartiers couverts</div>
+                        <div class="quartiers-list">
+                            <span class="quartier-tag">Plateau</span>
+                            <span class="quartier-tag">Médina</span>
+                            <span class="quartier-tag">Mermoz</span>
+                            <span class="quartier-tag">Fann</span>
+                        </div>
+                    </div>
+                    <div class="zone-actions">
+                        <button class="btn-action btn-edit" onclick="openZoneModal()">
+                            <i class="fas fa-edit"></i>
+                            Modifier
+                        </button>
+                        <button class="btn-action btn-delete">
+                            <i class="fas fa-trash"></i>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Zone 3 -->
+                <div class="zone-card">
+                    <div class="zone-header">
+                        <div class="zone-name">Zone Sud</div>
+                        <div class="zone-price">2000 F</div>
+                    </div>
+                    <div class="zone-quartiers">
+                        <div class="quartiers-title">Quartiers couverts</div>
+                        <div class="quartiers-list">
+                            <span class="quartier-tag">Pikine</span>
+                            <span class="quartier-tag">Guédiawaye</span>
+                            <span class="quartier-tag">Parcelles Assainies</span>
+                            <span class="quartier-tag">Thiaroye</span>
+                        </div>
+                    </div>
+                    <div class="zone-actions">
+                        <button class="btn-action btn-edit" onclick="openZoneModal()">
+                            <i class="fas fa-edit"></i>
+                            Modifier
+                        </button>
+                        <button class="btn-action btn-delete">
+                            <i class="fas fa-trash"></i>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Assign Delivery Person -->
+    <div id="assignModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Affecter un livreur</h2>
+                <button class="btn-close" onclick="closeModal('assignModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Commande <strong id="orderNumber"></strong></label>
+            </div>
+
+            <div class="delivery-persons-modal">
+                <div class="person-option" onclick="this.classList.toggle('selected')">
+                    <div class="person-avatar">AB</div>
+                    <div class="person-info">
+                        <div class="person-name">Abdou Sarr</div>
+                        <div class="person-status">
+                            <span class="status-dot dot-available"></span>
+                            Disponible - 12 livraisons aujourd'hui
+                        </div>
+                    </div>
+                </div>
+
+                <div class="person-option" onclick="this.classList.toggle('selected')">
+                    <div class="person-avatar">MO</div>
+                    <div class="person-info">
+                        <div class="person-name">Moussa Fall</div>
+                        <div class="person-status">
+                            <span class="status-dot dot-available"></span>
+                            Disponible - 8 livraisons aujourd'hui
+                        </div>
+                    </div>
+                </div>
+
+                <div class="person-option" style="opacity: 0.5;">
+                    <div class="person-avatar">IB</div>
+                    <div class="person-info">
+                        <div class="person-name">Ibrahima Diop</div>
+                        <div class="person-status">
+                            <span class="status-dot dot-busy"></span>
+                            Occupé - 2 livraisons en cours
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="closeModal('assignModal')">
+                <i class="fas fa-check"></i>
+                Confirmer l'affectation
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal: Add Zone -->
+    <div id="zoneModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Ajouter une Zone</h2>
+                <button class="btn-close" onclick="closeModal('zoneModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Nom de la zone</label>
+                    <input type="text" class="form-input" placeholder="Ex: Zone Nord" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Prix de livraison (FCFA)</label>
+                    <input type="number" class="form-input" placeholder="Ex: 1500" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Quartiers (séparés par des virgules)</label>
+                    <input type="text" class="form-input" placeholder="Ex: Almadies, Ngor, Ouakam" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i>
+                    Enregistrer la zone
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add Delivery Person -->
+    <div id="addDeliveryPersonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Ajouter un Livreur</h2>
+                <button class="btn-close" onclick="closeModal('addDeliveryPersonModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Nom complet</label>
+                    <input type="text" class="form-input" placeholder="Ex: Abdou Sarr" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="form-input" placeholder="+221 77 123 45 67" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="abdou@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Zone principale</label>
+                    <select class="form-select" required>
+                        <option value="">-- Choisir une zone --</option>
+                        <option value="nord">Zone Nord</option>
+                        <option value="centre">Zone Centre</option>
+                        <option value="sud">Zone Sud</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i>
+                    Ajouter le livreur
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showZones() {
+            document.getElementById('deliveryContent').style.display = 'none';
+            document.getElementById('zonesContent').style.display = 'grid';
+        }
+
+        function showDeliveries() {
+            document.getElementById('deliveryContent').style.display = 'grid';
+            document.getElementById('zonesContent').style.display = 'none';
+        }
+
+        function openAssignModal(orderNumber) {
+            document.getElementById('orderNumber').textContent = orderNumber;
+            document.getElementById('assignModal').classList.add('active');
+        }
+
+        function openZoneModal() {
+            document.getElementById('zoneModal').classList.add('active');
+        }
+
+        function openAddDeliveryPersonModal() {
+            document.getElementById('addDeliveryPersonModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+    </script>
+</body>
+</html>
