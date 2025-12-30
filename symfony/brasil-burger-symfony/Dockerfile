@@ -1,32 +1,49 @@
 FROM php:8.2-apache
 
-# Dépendances système
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev libicu-dev libzip-dev \
+    git \
+    unzip \
+    libpq-dev \
+    libicu-dev \
+    libzip-dev \
     && docker-php-ext-install pdo pdo_pgsql intl zip opcache \
     && a2enmod rewrite
 
-# Installer Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www/html
 
-# Copier TOUT le projet d'abord
+# Copy application files
 COPY . .
 
-# Installer les dépendances Symfony
-RUN COMPOSER_ALLOW_SUPERUSER=1 \
-    composer install --no-dev --optimize-autoloader --no-interaction
+# Create .env.local for production
+RUN echo "APP_ENV=prod" > .env.local && echo "APP_DEBUG=0" >> .env.local
 
-# Apache → dossier public
-RUN sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
+# Install dependencies without scripts to avoid cache:clear error
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
-# Permissions Symfony
-RUN mkdir -p var/cache/prod var/log \
-    && chown -R www-data:www-data var
+# Install JavaScript assets (importmap)
+RUN APP_ENV=prod php bin/console importmap:install || true
 
-# Warmup cache prod (IMPORTANT)
-RUN APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --no-debug || true
+# Configure Apache with proper rewrite rules
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+RUN sed -i '/<\/VirtualHost>/i \
+    <Directory /var/www/html/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+        FallbackResource /index.php\n\
+    </Directory>' /etc/apache2/sites-available/000-default.conf
+
+# Set permissions and create directories
+RUN mkdir -p /var/www/html/var/cache/prod /var/www/html/var/log
+RUN chown -R www-data:www-data /var/www/html/var
+
+# Warm up cache for production
+RUN APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup --no-debug || true
 
 EXPOSE 80
+
 CMD ["apache2-foreground"]
