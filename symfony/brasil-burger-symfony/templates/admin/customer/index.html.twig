@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Clients - Brasil Burger Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f6fa;
+            color: #2c1810;
+            overflow-x: hidden;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            width: 280px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+
+        .logo-section {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .admin-logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .admin-logo-text h2 {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .admin-logo-text p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.75rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1100;
+            background: #C8102E;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #C8102E;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.9rem 1.2rem 0.9rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #C8102E;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8B4513;
+        }
+
+        .btn-export {
+            background: white;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            padding: 0.9rem 1.8rem;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-export:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .icon-purple {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(123, 31, 162, 0.1));
+            color: #9C27B0;
+        }
+
+        .icon-green {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(69, 160, 73, 0.1));
+            color: #4CAF50;
+        }
+
+        .icon-yellow {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+            color: #FFA500;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-label {
+            color: #8B4513;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2c1810;
+        }
+
+        .filters-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #f8f9fa;
+            color: #2c1810;
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #C8102E;
+            color: white;
+            border-color: #C8102E;
+        }
+
+        .customers-table-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .customers-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .customers-table thead {
+            background: linear-gradient(135deg, #FFF8E7, #FFEFD5);
+        }
+
+        .customers-table th {
+            text-align: left;
+            padding: 1.5rem 1rem;
+            color: #C8102E;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .customers-table td {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .customers-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .customers-table tbody tr:hover {
+            background: #FFF8E7;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .customer-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .customer-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .customer-name {
+            font-weight: 700;
+            color: #2c1810;
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+        }
+
+        .customer-email {
+            font-size: 0.85rem;
+            color: #8B4513;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .customer-badge {
+            padding: 0.4rem 0.9rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .badge-vip {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #C8102E;
+        }
+
+        .badge-regular {
+            background: #E3F2FD;
+            color: #2196F3;
+        }
+
+        .badge-new {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-icon {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-view {
+            background: #E3F2FD;
+            color: #2196F3;
+        }
+
+        .btn-view:hover {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-orders {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .btn-orders:hover {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-message {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .btn-message:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #C8102E;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8B4513;
+        }
+
+        .customer-profile {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #FFF8E7, #FFEFD5);
+            border-radius: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #C8102E, #FF4655);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .profile-info h2 {
+            font-size: 1.8rem;
+            color: #C8102E;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: #8B4513;
+            margin-bottom: 0.3rem;
+        }
+
+        .customer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .customer-stat-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .customer-stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #C8102E;
+            margin-bottom: 0.3rem;
+        }
+
+        .customer-stat-label {
+            font-size: 0.85rem;
+            color: #8B4513;
+        }
+
+        .recent-orders {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c1810;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .order-info-modal h4 {
+            font-size: 1rem;
+            color: #2c1810;
+            margin-bottom: 0.3rem;
+        }
+
+        .order-date {
+            font-size: 0.85rem;
+            color: #8B4513;
+        }
+
+        .order-amount {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #C8102E;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 5rem 1.5rem 2rem;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+            }
+
+            .search-box {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .btn-export {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .filters-bar {
+                padding: 1rem;
+            }
+
+            .filter-btn {
+                flex: 1;
+                min-width: 140px;
+                text-align: center;
+            }
+
+            .customers-table th,
+            .customers-table td {
+                padding: 1rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .customer-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-info h2 {
+                font-size: 1.4rem;
+            }
+
+            .customer-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .stat-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .customer-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
+            .customers-table {
+                min-width: 700px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .btn-icon {
+                width: 100%;
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="admin-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <a href="brasil_burger_admin_dashboard.html" class="admin-logo">
+                    <div class="admin-logo-icon">🍔</div>
+                    <div class="admin-logo-text">
+                        <h2>Brasil Burger</h2>
+                        <p>Panneau Admin</p>
+                    </div>
+                </a>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="{{ path('admin_dashboard') }}" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_commandes_index') }}" class="nav-link ">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Commandes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_burgers_index') }}" class="nav-link">
+                            <i class="fas fa-hamburger"></i>
+                            <span>Produits</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ path('admin_complements_index') }}" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Compléments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="brasil_burger_admin_delivery.html" class="nav-link">
+                            <i class="fas fa-motorcycle"></i>
+                            <span>Livraisons</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_customers_index') }}" class="nav-link active">
+                            <i class="fas fa-users"></i>
+                            <span>Clients</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="brasil_burger_admin_login.html" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Déconnexion</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">Gestion des Clients</h1>
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <form method="get">
+    <input type="text"
+           name="q"
+           value="{{ search }}"
+           class="search-input"
+           placeholder="Rechercher un client...">
+</form>
+
+                </div>
+                
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-purple">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total clients</div>
+                        <div class="stat-value">{{ stats.total }}</div>
+
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-green">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Nouveaux ce mois</div>
+                        <div class="stat-value">{{ stats.nouveaux }}</div>
+
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-yellow">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Clients VIP</div>
+                        <div class="stat-value">{{ stats.vip }}</div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-bar">
+                <a href="{{ path('admin_customers_index') }}" class="filter-btn {{ filter is null ? 'active' : '' }}">
+    Tous les clients
+</a>
+
+<a href="{{ path('admin_customers_index', {filter: 'vip'}) }}"
+   class="filter-btn {{ filter == 'vip' ? 'active' : '' }}">
+    Clients VIP
+</a>
+
+<a href="{{ path('admin_customers_index', {filter: 'regular'}) }}"
+   class="filter-btn {{ filter == 'regular' ? 'active' : '' }}">
+    Clients réguliers
+</a>
+
+<a href="{{ path('admin_customers_index', {filter: 'new'}) }}"
+   class="filter-btn {{ filter == 'new' ? 'active' : '' }}">
+    Nouveaux clients
+</a>
+
+            </div>
+
+            <div class="customers-table-container">
+                <div class="table-wrapper">
+                    <table class="customers-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Téléphone</th>
+                                <th>Commandes</th>
+                                <th>Total dépensé</th>
+                                <th>Statut</th>
+                                <th>Dernière visite</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+{% for client in clients %}
+<tr>
+    <td>
+        <div class="customer-info">
+            <div class="customer-avatar">
+                {{ client.prenom|first }}{{ client.nom|first }}
+            </div>
+            <div class="customer-details">
+                <div class="customer-name">
+                    {{ client.prenom }} {{ client.nom }}
+                </div>
+                <div class="customer-email">
+                    {{ client.email }}
+                </div>
+            </div>
+        </div>
+    </td>
+
+    <td>{{ client.telephone }}</td>
+
+    <td>
+        <strong>{{ client.nbCommandes }}</strong> commandes
+    </td>
+
+    <td>
+        <strong>
+            {{ client.totalDepense|default(0)|number_format(0, ',', ' ') }} FCFA
+        </strong>
+    </td>
+
+    <td>
+        {% set nbCommandes = client.commandes|length %}
+
+{% if nbCommandes >= 20 %}
+    <span class="customer-badge badge-vip">🌟 VIP</span>
+{% elseif nbCommandes < 5 %}
+    <span class="customer-badge badge-new">Nouveau</span>
+{% else %}
+    <span class="customer-badge badge-regular">Régulier</span>
+{% endif %}
+
+    </td>
+
+    <td>
+    {% if client.commandes|length > 0 %}
+        {{ client.commandes|last.dateCommande|date('d/m/Y') }}
+    {% else %}
+        —
+    {% endif %}
+</td>
+
+
+
+    <td>
+        <div class="action-buttons">
+            <button class="btn-icon btn-view"
+    onclick="openCustomerModal({{ client.id }})">
+
+                <i class="fas fa-eye"></i>
+            </button>
+
+            <a href="{{ path('admin_customers_orders', {id: client.id}) }}"
+   class="btn-icon btn-orders">
+
+                <i class="fas fa-shopping-bag"></i>
+            </a>
+
+            <a href="mailto:{{ client.email }}"
+               class="btn-icon btn-message">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="7" style="text-align:center; padding:2rem;">
+        Aucun client trouvé
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+
+                    </table>
+                    <div style="margin-top:2rem; text-align:center;">
+    {% for p in 1..totalPages %}
+        <a href="{{ path('admin_customers_index', {
+            page: p,
+            q: search,
+            filter: filter
+        }) }}"
+           style="
+           margin:0 5px;
+           padding:8px 14px;
+           border-radius:8px;
+           text-decoration:none;
+           background: {{ p == page ? '#C8102E' : '#eee' }};
+           color: {{ p == page ? '#fff' : '#333' }};
+           ">
+           {{ p }}
+        </a>
+    {% endfor %}
+</div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Profil Client</h2>
+                <button class="btn-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="customer-profile">
+                <div class="profile-avatar">MD</div>
+                <div class="profile-info">
+                    <h2 id="customerName">Mamadou Diallo</h2>
+                    <p><i class="fas fa-envelope"></i> mamadou.diallo@email.com</p>
+                    <p><i class="fas fa-phone"></i> +221 77 123 45 67</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Sacré Coeur 3, Dakar</p>
+                    <p><i class="fas fa-calendar"></i> Membre depuis Mars 2023</p>
+                </div>
+            </div>
+
+            <div class="customer-stats">
+                <div class="customer-stat-box">
+                    <div class="customer-stat-value">47</div>
+                    <div class="customer-stat-label">Commandes</div>
+                </div>
+                <div class="customer-stat-box">
+                    <div class="customer-stat-value">825,000</div>
+                    <div class="customer-stat-label">Total dépensé (FCFA)</div>
+                </div>
+                <div class="customer-stat-box">
+                    <div class="customer-stat-value">17,553</div>
+                    <div class="customer-stat-label">Panier moyen (FCFA)</div>
+                </div>
+            </div>
+
+            <div class="recent-orders">
+                <h3 class="section-title">Commandes récentes</h3>
+                
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4>#BB-1387 - Menu Carioca x2</h4>
+                        <p class="order-date">13 Décembre 2024</p>
+                    </div>
+                    <div class="order-amount">20,000 FCFA</div>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4>#BB-1298 - Burger Bahia x3</h4>
+                        <p class="order-date">10 Décembre 2024</p>
+                    </div>
+                    <div class="order-amount">9,000 FCFA</div>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4>#BB-1245 - Menu São Paulo x1</h4>
+                        <p class="order-date">7 Décembre 2024</p>
+                    </div>
+                    <div class="order-amount">5,500 FCFA</div>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4>#BB-1187 - Burger Amazon + Frites</h4>
+                        <p class="order-date">3 Décembre 2024</p>
+                    </div>
+                    <div class="order-amount">5,000 FCFA</div>
+                </div>
+            </div>
+
+            <div class="recent-orders">
+                <h3 class="section-title">Préférences</h3>
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4><i class="fas fa-heart" style="color: #C8102E;"></i> Produit favori</h4>
+                        <p class="order-date">Menu Carioca (commandé 15 fois)</p>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4><i class="fas fa-clock" style="color: #FF9800;"></i> Horaire préféré</h4>
+                        <p class="order-date">13h00 - 14h00</p>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-info-modal">
+                        <h4><i class="fas fa-motorcycle" style="color: #2196F3;"></i> Mode préféré</h4>
+                        <p class="order-date">Livraison (78% des commandes)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-visible');
+        }
+
+        function openCustomerModal(customerName) {
+            document.getElementById('customerName').textContent = customerName;
+            document.getElementById('customerModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('customerModal').classList.remove('active');
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.customers-table tbody tr');
+            
+            rows.forEach(row => {
+                const customerName = row.querySelector('.customer-name').textContent.toLowerCase();
+                const customerEmail = row.querySelector('.customer-email').textContent.toLowerCase();
+                
+                if (customerName.includes(searchTerm) || customerEmail.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                sidebar.classList.remove('mobile-visible');
+            }
+        });
+    </script>
+    <script>
+function openCustomerModal(id) {
+    fetch('/admin/clients/' + id + '/modal')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('customerModal').innerHTML = html;
+            document.getElementById('customerModal').classList.add('active');
+        });
+}
+</script>
+
+</body>
+</html>                                   

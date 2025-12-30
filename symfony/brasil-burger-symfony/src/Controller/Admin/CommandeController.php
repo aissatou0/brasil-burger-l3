@@ -154,4 +154,6 @@ class CommandeController extends AbstractController
         $this->addFlash('success', 'Commande livrée.');
         return $this->redirectToRoute('admin_commandes_show', ['id' => $commande->getId()]);
     }
+
+    
 }

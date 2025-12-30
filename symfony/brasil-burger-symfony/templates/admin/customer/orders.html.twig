@@ -1,0 +1,24 @@
+<h1>Commandes de {{ client.prenom }} {{ client.nom }}</h1>
+
+<table border="1" width="100%" cellpadding="10">
+<tr>
+    <th>ID</th>
+    <th>Date</th>
+    <th>Total</th>
+    <th>État</th>
+</tr>
+
+{% for cmd in commandes %}
+<tr>
+    <td>#{{ cmd.id }}</td>
+    <td>{{ cmd.dateCommande|date('d/m/Y') }}</td>
+    <td>{{ cmd.total }} FCFA</td>
+    <td>{{ cmd.etatCommande }}</td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="4">Aucune commande</td>
+</tr>
+{% endfor %}
+</table>
+<a href="{{ path('admin_customers_index') }}">Retour à la liste des clients</a>
